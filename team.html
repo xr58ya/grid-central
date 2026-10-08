@@ -70,12 +70,14 @@
         <div class="card"><h2>Standings</h2><table id="standings"><tbody><tr><td class="empty">Waiting for the car.</td></tr></tbody></table></div>
         <div style="display:grid;gap:12px;align-content:start">
           <div class="card"><h2>Race strategy</h2><div class="advice" id="advice">—</div><div class="stats" id="stats"></div><p class="note" id="team-line"></p></div>
-          <div class="card"><h2>Radio</h2><ol class="radio" id="radio"><li class="empty">Race calls and team messages appear here.</li></ol>
+          <div class="card"><h2>Radio</h2><ol class="radio" id="radio" translate="no"><li class="empty">Race calls and team messages appear here.</li></ol>
             <form id="chat"><input id="chat-name" placeholder="Your name" maxlength="30" autocomplete="name"><input id="chat-text" placeholder="Message to the driver" maxlength="200" autocomplete="off"><button type="submit">Send</button></form>
             <p class="note">Messages are read out to the driver by their race engineer.</p></div>
         </div>
       </section>
     </main>
+    <script src="es.js"></script>
+    <script src="i18n.js"></script>
     <script src="team.js"></script>
   </body>
 </html>

@@ -2,6 +2,9 @@
 // come in the link Grid Central gives the driver: team.html?db=...&room=...), and sends messages to the driver.
 (() => {
   const $ = selector => document.querySelector(selector);
+  // Text on the page is translated by i18n.js (team.html?...&lang=es) as it changes; T() is for text it can't see.
+  const T = text => (window.gridLang ? window.gridLang.t(text) : text);
+  $("#radio .empty").textContent = T($("#radio .empty").textContent);
   const params = new URLSearchParams(location.search);
   const db = (params.get("db") || "").replace(/\/+$/, "");
   const room = params.get("room") || "";
@@ -67,7 +70,7 @@
     const live = data.live || {};
     const info = data.info || {};
     $("#team").textContent = info.name || live.team || "Team hub";
-    document.title = `${info.name || "Grid Central"} · Team hub`;
+    document.title = `${info.name || "Grid Central"} · ${T("Team hub")}`;
     const fresh = live.at && Date.now() / 1000 - live.at < 15;
     if (!live.at) setState("WAITING FOR THE CAR");
     else if (!fresh) setState("NOT SENDING", "bad");
@@ -119,11 +122,12 @@
       return `<div><span>${label}</span><b class="${stat.tone ? `is-${esc(stat.tone)}` : ""}">${esc(stat.value || "—")}</b><span>${esc(stat.note || "")}</span></div>`;
     }).join("");
     $("#team-line").textContent = s.team || "";
-    // Radio.
+    // Radio (left alone by i18n.js, so the driver's own words stay as said; the car's calls come in English).
     const radio = Array.isArray(data.radio) ? data.radio : Object.values(data.radio || {});
+    const said = item => (item.who === "driver" || !window.gridLang ? item.text : window.gridLang.speech(String(item.text || "")));
     $("#radio").innerHTML = radio.length
-      ? radio.slice().reverse().map(item => `<li class="${esc(item.who)}"><b>${esc(String(item.who || "radio").toUpperCase())}${item.at ? ` · ${new Date(item.at * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : ""}</b>${esc(item.text)}</li>`).join("")
-      : '<li class="empty">Race calls and team messages appear here.</li>';
+      ? radio.slice().reverse().map(item => `<li class="${esc(item.who)}"><b>${esc(T(String(item.who || "radio").toUpperCase()))}${item.at ? ` · ${new Date(item.at * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : ""}</b>${esc(said(item))}</li>`).join("")
+      : `<li class="empty">${esc(T("Race calls and team messages appear here."))}</li>`;
   }
   setInterval(render, 5000); // notices when the car stops sending
 
@@ -142,7 +146,7 @@
       if (!response.ok) throw new Error(String(response.status));
       $("#chat-text").value = "";
     } catch {
-      alert("Couldn't send that. Check your connection and try again.");
+      alert(T("Couldn't send that. Check your connection and try again."));
     } finally {
       button.disabled = false;
     }
