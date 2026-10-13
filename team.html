@@ -49,6 +49,11 @@
       .note{color:var(--muted);font-size:12px;margin:8px 0 0}
       .empty{color:var(--muted);font-size:14px}
       .hidden{display:none!important}
+      .cars{display:flex;flex-wrap:wrap;gap:8px}
+      .cars button{height:34px;padding:0 14px;background:var(--surface-2);color:var(--text);border:1px solid var(--border);font-weight:700}
+      .cars button.on{background:var(--accent);color:#141a08;border-color:var(--accent)}
+      .cars button i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);margin-right:7px}
+      .cars button.live i{background:var(--good)}
     </style>
   </head>
   <body>
@@ -57,6 +62,7 @@
         <div><div class="brand">GC<span>.</span> GRID CENTRAL · TEAM HUB</div><h1 id="team">Team hub</h1><div class="sub" id="where">Connecting…</div></div>
         <span class="chip" id="state"><i></i> CONNECTING</span>
       </header>
+      <div class="cars hidden" id="cars"></div>
       <div class="banner hidden" id="banner"></div>
       <section class="grid">
         <div class="stat"><small>Position</small><strong id="pos">—</strong><span id="pos-note"></span></div>
@@ -77,6 +83,7 @@
       </section>
     </main>
     <script src="es.js"></script>
+    <script src="de.js"></script>
     <script src="i18n.js"></script>
     <script src="team.js"></script>
   </body>
