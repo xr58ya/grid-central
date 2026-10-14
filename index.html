@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Grid Central · Your race engineer for iRacing</title>
-<meta name="description" content="Grid Central is your race engineer for iRacing: a voice spotter, driver coach, live fuel strategy, setup help, overlays and a paint shop, on your PC.">
+<meta name="description" content="Grid Central is your race engineer for iRacing: a voice spotter, driver coach, live fuel strategy, setup help, overlays, stream commentary and a paint shop, on your PC.">
 <meta property="og:title" content="Grid Central · Your race engineer for iRacing">
-<meta property="og:description" content="Voice spotter, driver coach, live strategy, setups, overlays and more, for iRacing on Windows.">
+<meta property="og:description" content="Voice spotter, driver coach, live strategy, setups, overlays, stream commentary and more, for iRacing on Windows.">
 <meta property="og:image" content="site/overview.png">
 <link rel="icon" href="site/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,6 +68,8 @@
   .card ul { margin: 0; padding-left: 20px; color: #c4c7bf; }
   .card li + li { margin-top: 6px; }
   .price { font: 700 34px var(--display); margin: 4px 0 6px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card.is-pro { border-color: var(--lime); }
 
   .faq details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
   .faq details + details { margin-top: 10px; }
@@ -80,7 +82,7 @@
 
   @media (max-width: 760px) {
     nav { display: none; }
-    .gallery, .split { grid-template-columns: 1fr; }
+    .gallery, .split, .plans { grid-template-columns: 1fr; }
     .hero { padding-top: 48px; }
     section { padding: 52px 0; }
     footer .links { margin-left: 0; }
@@ -125,9 +127,11 @@
         <div class="feature"><div class="tag">COACH</div><h3>Find your next tenth</h3><p>Every lap is compared with your best, corner by corner: braking, apex speed, exits. One focus corner at a time until it's fixed.</p></div>
         <div class="feature"><div class="tag">STRATEGY</div><h3>Fuel to the finish</h3><p>Live fuel per lap, laps to go, the pit window and what to add. It can even set the fuel in iRacing's pit menu for you.</p></div>
         <div class="feature"><div class="tag">SETUPS</div><h3>Setup help that makes sense</h3><p>Say "it's understeering" or "it bottoms out" and get the garage change to try. Compare setups by the laps you drove on them.</p></div>
-        <div class="feature"><div class="tag">OVERLAYS</div><h3>Overlays for stream and screen</h3><p>Design your own from widgets, or start from a template. Add it to OBS with one link, or show it over iRacing while you drive.</p></div>
-        <div class="feature"><div class="tag">PAINT SHOP</div><h3>Paint your car</h3><p>Load the car's template, recolour panels, add numbers and logos, then install the paint straight into iRacing.</p></div>
-        <div class="feature"><div class="tag">TEAM</div><h3>Phone pit wall and team hub</h3><p>Live timing and strategy on your phone, a team page for your crew anywhere, driver swaps, and Discord for your league.</p></div>
+        <div class="feature"><div class="tag">OVERLAYS</div><h3>Overlays for stream and screen</h3><p>Design your own from widgets, or start from a template: standings, relative, fuel, tyres, flags, track map, captions and more. Add it to OBS in one click, or show it over iRacing while you drive.</p></div>
+        <div class="feature"><div class="tag">BROADCAST</div><h3>Race commentary for your stream</h3><p>Two commentators call the race like TV: overtakes, battles, pit stops, flags and the finish. Your viewers hear them through OBS or any streaming app; you don't.</p></div>
+        <div class="feature"><div class="tag">PAINT SHOP</div><h3>Paint your car, helmet and suit</h3><p>Start from iRacing's template and patterns, recolour, add numbers and logos, choose a finish from matte to chrome, and watch it change on your car in iRacing as you paint.</p></div>
+        <div class="feature"><div class="tag">TEAM</div><h3>Phone pit wall and team hub</h3><p>Live timing and strategy on your phone, and a team page your crew can follow from anywhere, with no setup on the Team plan. Driver swaps and team messages read out to the driver.</p></div>
+        <div class="feature"><div class="tag">DISCORD</div><h3>Results in your league's Discord</h3><p>Race results and session summaries with fuel use and tyre wear, personal bests, "going live" with all your stream links, and a league bot for schedules and sign-ups.</p></div>
       </div>
     </div>
   </section>
@@ -142,6 +146,8 @@
         <figure><img src="site/strategy.png" alt="Race strategy page with fuel to the finish, stops needed and the pit window" loading="lazy" width="1416" height="774"><figcaption>Race strategy: fuel to the finish and the pit window, live.</figcaption></figure>
         <figure><img src="site/overlay.png" alt="Overlay designer with a race overlay and the widget list" loading="lazy" width="1416" height="774"><figcaption>Overlay designer: for OBS, or on your screen in iRacing.</figcaption></figure>
         <figure><img src="site/setup.png" alt="Race setup page with the loaded setup and the setup advisor" loading="lazy" width="1416" height="774"><figcaption>Race setup: what's loaded, what changed, and what to try.</figcaption></figure>
+        <figure><img src="site/commentary.png" alt="Commentary settings on the Broadcast page: whose race to follow, the two voices and how much they talk" loading="lazy" width="1376" height="774"><figcaption>Broadcast commentary: two voices on your stream, not in your ears.</figcaption></figure>
+        <figure><img src="site/team-hub.png" alt="The team page following a race, with a button for each driver sharing their car" loading="lazy" width="1176" height="808"><figcaption>Team page: your crew follows whoever is driving, from anywhere.</figcaption></figure>
       </div>
     </div>
   </section>
@@ -149,20 +155,26 @@
   <section id="pricing">
     <div class="wrap">
       <div class="eyebrow">Pricing</div>
-      <h2>One subscription, <span>everything included.</span></h2>
-      <p class="section-lead">Grid Central is in a closed beta. Subscriptions open at launch, with a free trial.</p>
-      <div class="split">
+      <h2>Start free, <span>go Pro when you're ready.</span></h2>
+      <p class="section-lead">Grid Central is in a closed beta. Plans open at launch, starting with a 7-day free trial of everything, no card needed.</p>
+      <div class="plans">
         <div class="card">
-          <h3>Monthly</h3>
+          <h3>Free</h3>
+          <div class="price">$0</div>
+          <ul><li>Voice spotter: cars alongside, flags, hazards</li><li>Live dashboard and your lap times</li><li>A basic overlay for OBS</li><li>Car painting</li></ul>
+        </div>
+        <div class="card is-pro">
+          <h3>Pro</h3>
           <div class="price">Coming soon</div>
-          <ul><li>Every feature, every update</li><li>Free trial to start</li><li>Cancel any time</li></ul>
+          <ul><li>Your engineer and coach on the radio, and Talkback</li><li>Race strategy and setups</li><li>Lap comparison and telemetry</li><li>Every overlay widget, the in-game overlay and stream commentary</li><li>Helmet, suit, finishes and Live in iRacing</li><li>Phone pit wall, Discord and the team hub</li><li>Monthly or yearly, one PC</li></ul>
         </div>
         <div class="card">
-          <h3>Yearly</h3>
+          <h3>Team</h3>
           <div class="price">Coming soon</div>
-          <ul><li>Everything in monthly</li><li>Lower price than paying monthly</li><li>Beta testers get a thank-you at launch</li></ul>
+          <ul><li>Pro for every driver in your team, each on their own PC</li><li>A team hub that just works, no setup</li><li>One bill: choose how many seats</li></ul>
         </div>
       </div>
+      <p class="small">Beta testers get 12 months of Pro free at launch.</p>
     </div>
   </section>
 
@@ -198,6 +210,8 @@
       <details><summary>Does it send my data anywhere?</summary><p>No. Laps, setups and settings stay on your PC. Only the things you choose to share leave it, such as the team hub, the phone pit wall or Discord posts.</p></details>
       <details><summary>How does it get data from iRacing?</summary><p>A small companion program reads iRacing's live telemetry on your PC, the same way other sim racing tools do. It only reads; it never changes anything in iRacing except the pit menu, and only when you ask it to.</p></details>
       <details><summary>Windows says it doesn't recognise the Setup program.</summary><p>The beta isn't code-signed yet. Choose More info, then Run anyway. Signed releases are coming before launch.</p></details>
+      <details><summary>Will I hear the stream commentary while I drive?</summary><p>No. The commentary plays only into your stream: through the Grid Central overlay in OBS, or a sound device your streaming app captures. Your viewers hear it, and you hear only your spotter and engineer.</p></details>
+      <details><summary>Do I need an account?</summary><p>For the free trial and Pro, yes: an email and password, so your subscription can follow you to a new PC. Your laps, settings and paints still stay on your PC.</p></details>
       <details><summary>Which languages does it speak?</summary><p>English, Spanish and German: the app, your engineer's voice, and Talkback.</p></details>
     </div>
   </section>

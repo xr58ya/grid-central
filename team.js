@@ -9,7 +9,10 @@
   const db = (params.get("db") || "").replace(/\/+$/, "");
   const room = params.get("room") || "";
   const base = `${db}/rooms/${encodeURIComponent(room)}`;
-  const data = { live: null, strategy: null, radio: null, info: null };
+  // Your own hub: the car's live, strategy, radio and info. The Team plan's hosted hub: one of those per driver,
+  // under cars/<driver>, and the page follows whoever is driving (or the one you pick).
+  const data = { live: null, strategy: null, radio: null, info: null, cars: null };
+  let picked = null;
   const esc = text => String(text ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const num = value => typeof value === "number" && Number.isFinite(value);
   const lapTime = s => (num(s) && s > 0 ? `${Math.floor(s / 60)}:${(s % 60).toFixed(3).padStart(6, "0")}` : "—");
@@ -34,7 +37,7 @@
   function apply(path, value) {
     const parts = path.split("/").filter(Boolean);
     if (!parts.length) {
-      Object.assign(data, { live: null, strategy: null, radio: null, info: null }, value || {});
+      Object.assign(data, { live: null, strategy: null, radio: null, info: null, cars: null }, value || {});
       return;
     }
     let target = data;
@@ -66,9 +69,33 @@
   const FLAGS = [["red", "RED FLAG", "red"], ["black", "BLACK FLAG", "black"], ["repair", "MEATBALL · PIT FOR REPAIRS", "black"], ["checkered", "CHEQUERED FLAG", "white"],
     ["caution", "CAUTION", "yellow"], ["cautionWaving", "CAUTION", "yellow"], ["yellow", "YELLOW FLAG", "yellow"], ["yellowWaving", "YELLOW FLAG", "yellow"], ["white", "WHITE FLAG · LAST LAP", "white"], ["blue", "BLUE FLAG", "blue"]];
 
+  // The car to show: on the hosted hub, the one you picked, else whoever is in iRacing and sent most recently.
+  function current() {
+    const box = $("#cars");
+    if (!data.cars || typeof data.cars !== "object") {
+      box.classList.add("hidden");
+      return data;
+    }
+    const now = Date.now() / 1000;
+    const cars = Object.entries(data.cars).map(([id, car]) => ({ id, ...(car || {}) })).filter(car => car.live && car.live.at);
+    const score = car => (car.live.connected && now - car.live.at < 15 ? 1e12 : 0) + car.live.at;
+    cars.sort((a, b) => score(b) - score(a));
+    const shown = cars.find(car => car.id === picked) || cars[0] || { live: null, strategy: null, radio: null, info: null };
+    box.classList.toggle("hidden", cars.length < 2);
+    box.innerHTML = cars.map(car => `<button type="button" data-car="${esc(car.id)}" class="${car.id === shown.id ? "on" : ""}${car.live.connected && now - car.live.at < 15 ? " live" : ""}"><i></i>${esc(car.live.driver || T("Driver"))}</button>`).join("");
+    return shown;
+  }
+  $("#cars").addEventListener("click", event => {
+    const button = event.target.closest("[data-car]");
+    if (!button) return;
+    picked = button.dataset.car;
+    render();
+  });
+
   function render() {
-    const live = data.live || {};
-    const info = data.info || {};
+    const src = current();
+    const live = src.live || {};
+    const info = src.info || {};
     $("#team").textContent = info.name || live.team || "Team hub";
     document.title = `${info.name || "Grid Central"} · ${T("Team hub")}`;
     const fresh = live.at && Date.now() / 1000 - live.at < 15;
@@ -96,13 +123,13 @@
     $("#ahead-who").textContent = ahead ? `#${ahead.n} ${short(ahead.name)}` : "";
     $("#behind").textContent = gap(me, behind);
     $("#behind-who").textContent = behind ? `#${behind.n} ${short(behind.name)}` : "";
-    const imperial = data.strategy && data.strategy.units === "imperial";
+    const imperial = src.strategy && src.strategy.units === "imperial";
     $("#fuel").textContent = num(l.fuelL) ? (imperial ? `${(l.fuelL * 0.264172).toFixed(1)} gal` : `${l.fuelL.toFixed(1)} L`) : "—";
-    $("#fuel-laps").textContent = data.strategy && num(data.strategy.lapsOfFuel) ? `${data.strategy.lapsOfFuel.toFixed(1)} laps` : "";
+    $("#fuel-laps").textContent = src.strategy && num(src.strategy.lapsOfFuel) ? `${src.strategy.lapsOfFuel.toFixed(1)} laps` : "";
     // Banner: flags first, then the pit call.
     const flags = new Set(l.flags || []);
     const flag = FLAGS.find(([name]) => flags.has(name));
-    const boxIn = data.strategy && data.strategy.boxIn;
+    const boxIn = src.strategy && src.strategy.boxIn;
     const banner = $("#banner");
     const text = flag ? flag[1] : fresh && live.connected && boxIn === 0 && !l.inPits ? "BOX THIS LAP" : fresh && live.connected && boxIn === 1 && !l.inPits ? "BOX NEXT LAP" : "";
     banner.textContent = text;
@@ -113,7 +140,7 @@
         + `<td>${race ? (car.p === 1 ? "Leader" : num(car.gap) && num(field[0].gap) ? `+${(car.gap - field[0].gap).toFixed(1)}` : "—") : lapTime(car.best)}</td><td>${lapTime(car.last)}</td></tr>`).join("")}</tbody>`
       : '<tbody><tr><td class="empty">Waiting for the car.</td></tr></tbody>';
     // Strategy.
-    const s = data.strategy || {};
+    const s = src.strategy || {};
     $("#advice").textContent = s.advice || "—";
     $("#advice").classList.toggle("urgent", Boolean(s.urgent));
     const LABELS = { finish: "To the finish", stops: "Stops left", add: "Add at next stop", window: "Pit window" };
@@ -123,7 +150,7 @@
     }).join("");
     $("#team-line").textContent = s.team || "";
     // Radio (left alone by i18n.js, so the driver's own words stay as said; the car's calls come in English).
-    const radio = Array.isArray(data.radio) ? data.radio : Object.values(data.radio || {});
+    const radio = Array.isArray(src.radio) ? src.radio : Object.values(src.radio || {});
     const said = item => (item.who === "driver" || !window.gridLang ? item.text : window.gridLang.speech(String(item.text || "")));
     $("#radio").innerHTML = radio.length
       ? radio.slice().reverse().map(item => `<li class="${esc(item.who)}"><b>${esc(T(String(item.who || "radio").toUpperCase()))}${item.at ? ` · ${new Date(item.at * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : ""}</b>${esc(said(item))}</li>`).join("")
