@@ -29,7 +29,7 @@
 
   if (!db || !room) {
     setState("NO LINK", "bad");
-    $("#where").textContent = "Open this page with the team link from Grid Central (Settings → Team hub → Copy team link).";
+    $("#where").textContent = "Open this page with the team link from Grid Central (Settings → Phone & team hub → Copy team link).";
     return;
   }
 

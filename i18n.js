@@ -142,9 +142,10 @@
       doneText.set(node, value);
     }
   }
-  const ATTRS = ["placeholder", "title", "aria-label", "data-pro", "data-pro-inline", "data-team"]; // data-pro: the names on free mode's PRO covers
+  // data-pro, data-team, data-broadcast (and -inline): the feature names on the plan covers and in "This is part of …"
+  const ATTRS = ["placeholder", "title", "aria-label", "data-pro", "data-pro-inline", "data-team", "data-team-inline", "data-broadcast", "data-broadcast-inline"];
   function translateAttributes(root) {
-    const elements = root.querySelectorAll ? [root, ...root.querySelectorAll("[placeholder],[title],[aria-label],[data-pro],[data-pro-inline],[data-team]")] : [];
+    const elements = root.querySelectorAll ? [root, ...root.querySelectorAll(ATTRS.map(name => `[${name}]`).join(","))] : [];
     elements.forEach(el => ATTRS.forEach(name => {
       const value = el.getAttribute && el.getAttribute(name);
       if (!value || el.dataset[`tr${name.replace(/-/g, "")}`] === value) return;
