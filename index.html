@@ -3,86 +3,71 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <title>Grid Central · Your race engineer for iRacing</title>
-<meta name="description" content="Grid Central is your race engineer for iRacing: a voice spotter, driver coach, live fuel strategy, setup help, overlays, stream commentary and a paint shop, on your PC.">
+<meta name="description" content="Grid Central is a race engineer for iRacing on Windows: a voice spotter, driver coach, live fuel strategy, setup help, overlays, stream commentary and a paint shop. Coming soon.">
 <meta property="og:title" content="Grid Central · Your race engineer for iRacing">
-<meta property="og:description" content="Voice spotter, driver coach, live strategy, setups, overlays, stream commentary and more, for iRacing on Windows.">
+<meta property="og:description" content="Voice spotter, driver coach, live strategy, setups, overlays, stream commentary and more, for iRacing on Windows. Coming soon.">
 <meta property="og:image" content="site/overview.png">
 <link rel="icon" href="site/icon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site/fonts/fonts.css">
+<!-- The coming soon page (owner, 20 Oct 2026): what Grid Central is and who it's for, until the full site (index.html
+     in dist\GitHub upload, with the shop) goes up at launch. Upload it to the website as index.html. -->
 <style>
   :root {
-    --bg: #101112; --surface: #17191a; --surface-2: #1d2021; --border: #2a2d2e;
-    --text: #e9eae5; --muted: #9a9f98; --lime: #d2ff50; --lime-ink: #151810;
+    --bg: #101112; --surface: #17191a; --border: #2a2d2e;
+    --text: #e9eae5; --muted: #9a9f98; --soft: #c4c7bf; --lime: #d2ff50; --lime-ink: #151810;
     --font: 'DM Sans', 'Segoe UI', Arial, sans-serif; --display: 'Space Grotesk', 'DM Sans', sans-serif;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--font); }
   a { color: inherit; }
   img { max-width: 100%; height: auto; display: block; }
   .wrap { width: min(1120px, 100% - 32px); margin: 0 auto; }
 
-  header { position: sticky; top: 0; z-index: 10; background: rgba(16, 17, 18, .9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
-  header .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 15px var(--display); letter-spacing: 1.5px; }
+  header { border-bottom: 1px solid var(--border); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 15px var(--display); letter-spacing: 1.5px; }
   .brand img { width: 30px; height: 30px; }
-  nav { margin-left: auto; display: flex; gap: 22px; font-size: 14px; }
-  nav a { text-decoration: none; color: var(--muted); }
-  nav a:hover { color: var(--text); }
+  .soon { padding: 5px 12px; border: 1px solid var(--lime); border-radius: 999px; color: var(--lime); font: 700 12px var(--font); letter-spacing: 1.5px; text-transform: uppercase; }
 
-  .button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 6px; font: 600 15px var(--font); text-decoration: none; border: 1px solid var(--border); background: var(--surface); }
-  .button:hover { border-color: #3a3e3f; }
-  .button.primary { background: var(--lime); color: var(--lime-ink); border-color: var(--lime); }
-  .button.primary:hover { filter: brightness(1.05); }
+  .button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 6px; font: 600 15px var(--font); text-decoration: none; border: 1px solid var(--lime); background: var(--lime); color: var(--lime-ink); }
+  .button:hover { filter: brightness(1.05); }
+  .button:focus-visible, a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
 
   .hero { padding: 72px 0 40px; text-align: center; }
   .eyebrow { color: var(--lime); font: 700 12px var(--font); letter-spacing: 2px; text-transform: uppercase; }
   h1 { font: 700 clamp(38px, 6vw, 64px)/1.05 var(--display); margin: 14px 0 18px; letter-spacing: -1px; }
   h1 span, h2 span { color: var(--lime); }
-  .lead { max-width: 640px; margin: 0 auto 28px; color: #c4c7bf; font-size: 18px; }
-  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-  .small { color: var(--muted); font-size: 13px; margin-top: 14px; }
+  .lead { max-width: 640px; margin: 0 auto 14px; color: var(--soft); font-size: 18px; }
+  .note { max-width: 640px; margin: 0 auto 28px; color: var(--muted); font-size: 15px; }
   .hero-shot { margin: 48px auto 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px #000a; }
 
   section { padding: 72px 0; border-top: 1px solid var(--border); }
   h2 { font: 700 clamp(28px, 4vw, 40px)/1.15 var(--display); margin: 10px 0 14px; letter-spacing: -.5px; }
-  .section-lead { color: #c4c7bf; max-width: 640px; margin: 0 0 36px; }
+  .section-lead { color: var(--soft); max-width: 640px; margin: 0 0 36px; }
 
   .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
-  .feature h3 { font: 600 18px var(--display); margin: 0 0 8px; }
-  .feature p { margin: 0; color: #c4c7bf; font-size: 15px; }
-  .feature .tag { display: inline-block; margin-bottom: 12px; color: var(--lime); font: 700 11px var(--font); letter-spacing: 1.5px; }
+  .feature, .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+  .feature h3, .card h3 { font: 600 18px var(--display); margin: 0 0 8px; }
+  .feature p, .card p { margin: 0; color: var(--soft); font-size: 15px; }
+  .tag { display: inline-block; margin-bottom: 12px; color: var(--lime); font: 700 12px var(--font); letter-spacing: 1.5px; }
 
   .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .gallery figure { margin: 0; }
   .gallery img { border: 1px solid var(--border); border-radius: 10px; }
   .gallery figcaption { color: var(--muted); font-size: 14px; margin-top: 10px; }
 
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 26px; }
-  .card h3 { font: 600 20px var(--display); margin: 0 0 12px; }
-  .card ul { margin: 0; padding-left: 20px; color: #c4c7bf; }
-  .card li + li { margin-top: 6px; }
-  .price { font: 700 34px var(--display); margin: 4px 0 6px; }
-  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .card.is-pro { border-color: var(--lime); }
-
-  .faq details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
-  .faq details + details { margin-top: 10px; }
-  .faq summary { cursor: pointer; font-weight: 600; }
-  .faq p { color: #c4c7bf; margin: 10px 0 0; }
+  .who { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .closing { text-align: center; }
+  .closing p { max-width: 600px; margin: 0 auto 24px; color: var(--soft); }
 
   footer { border-top: 1px solid var(--border); padding: 32px 0 48px; color: var(--muted); font-size: 13px; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; }
   footer .links { display: flex; gap: 18px; margin-left: auto; }
 
   @media (max-width: 760px) {
-    nav { display: none; }
-    .gallery, .split, .plans { grid-template-columns: 1fr; }
+    .gallery, .who { grid-template-columns: 1fr; }
     .hero { padding-top: 48px; }
     section { padding: 52px 0; }
     footer .links { margin-left: 0; }
@@ -92,46 +77,49 @@
 <body>
 <header>
   <div class="wrap">
-    <a class="brand" href="#top"><img src="site/icon.svg" alt="">GRID CENTRAL</a>
-    <nav aria-label="Sections">
-      <a href="#features">Features</a>
-      <a href="#screens">Screens</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
-    </nav>
-    <a class="button primary" href="#beta">Join the beta</a>
+    <div class="brand"><img src="site/icon.svg" alt="">GRID CENTRAL</div>
+    <span class="soon">Coming soon</span>
   </div>
 </header>
 
-<main id="top">
-  <div class="wrap hero">
-    <div class="eyebrow">For iRacing · Windows</div>
+<main>
+  <div class="hero wrap">
+    <div class="eyebrow">Coming soon · For iRacing on Windows</div>
     <h1>Your race engineer,<br><span>in your ear.</span></h1>
     <p class="lead">Grid Central calls the cars around you, coaches you corner by corner, works out your fuel and pit stops, and answers when you ask. It runs on your PC alongside iRacing.</p>
-    <div class="actions">
-      <a class="button primary" href="#beta">Join the beta</a>
-      <a class="button" href="#features">See what it does</a>
-    </div>
-    <p class="small">Closed beta now · English, Español, Deutsch</p>
+    <p class="note">It's being finished with a small group of beta testers now, and opens to everyone soon.</p>
     <img class="hero-shot" src="site/overview.png" alt="Grid Central's overview during a race at Road America: safety rating, iRating, best lap, track map and lap analysis" width="1416" height="774">
   </div>
 
   <section id="features">
     <div class="wrap">
-      <div class="eyebrow">What it does</div>
+      <div class="eyebrow">What it's for</div>
       <h2>Everything a race engineer does, <span>on one screen.</span></h2>
       <p class="section-lead">Live data comes straight from iRacing on your PC. Nothing about your driving leaves your computer unless you share it.</p>
       <div class="features">
-        <div class="feature"><div class="tag">SPOTTER</div><h3>Voice spotter and engineer</h3><p>Car left, car right, clear. Flags, gaps, fuel, damage, weather and pit calls, read out in a natural voice and never talking over each other.</p></div>
-        <div class="feature"><div class="tag">TALKBACK</div><h3>Ask, and it answers</h3><p>Hold a wheel button and ask "how's the fuel?" or "gap behind?", or tell it "four new tyres, fill it up". Recognised offline, in English, Spanish or German.</p></div>
-        <div class="feature"><div class="tag">COACH</div><h3>Find your next tenth</h3><p>Every lap is compared with your best, corner by corner: braking, apex speed, exits. One focus corner at a time until it's fixed.</p></div>
-        <div class="feature"><div class="tag">STRATEGY</div><h3>Fuel to the finish</h3><p>Live fuel per lap, laps to go, the pit window and what to add. It can even set the fuel in iRacing's pit menu for you.</p></div>
-        <div class="feature"><div class="tag">SETUPS</div><h3>Setup help that makes sense</h3><p>Say "it's understeering" or "it bottoms out" and get the garage change to try. Compare setups by the laps you drove on them.</p></div>
-        <div class="feature"><div class="tag">OVERLAYS</div><h3>Overlays for stream and screen</h3><p>Design your own from widgets, or start from a template: standings, relative, fuel, tyres, flags, track map, captions and more. Add it to OBS in one click, or show it over iRacing while you drive.</p></div>
-        <div class="feature"><div class="tag">BROADCAST</div><h3>Race commentary for your stream</h3><p>Two commentators call the race like TV: overtakes, battles, pit stops, flags and the finish. Your viewers hear them through OBS or any streaming app; you don't.</p></div>
-        <div class="feature"><div class="tag">PAINT SHOP</div><h3>Paint your car, helmet and suit</h3><p>Start from iRacing's template and patterns, recolour, add numbers and logos, choose a finish from matte to chrome, and watch it change on your car in iRacing as you paint.</p></div>
-        <div class="feature"><div class="tag">TEAM</div><h3>Phone pit wall and team hub</h3><p>Live timing and strategy on your phone, and a team page your crew can follow from anywhere, with no setup on Race Team. Driver swaps and team messages read out to the driver.</p></div>
-        <div class="feature"><div class="tag">DISCORD</div><h3>Results in your league's Discord</h3><p>Race results and session summaries with fuel use and tyre wear, personal bests, "going live" with all your stream links, and a league bot for schedules and sign-ups.</p></div>
+        <div class="feature"><span class="tag">SPOTTER</span><h3>Voice spotter and engineer</h3><p>Car left, car right, clear. Flags, gaps, fuel, damage, weather and pit calls, read out in a natural voice and never talking over each other.</p></div>
+        <div class="feature"><span class="tag">TALKBACK</span><h3>Ask, and it answers</h3><p>Hold a wheel button and ask "how's the fuel?" or "gap behind?", or tell it "four new tyres, fill it up". Recognised offline, in English, Spanish or German.</p></div>
+        <div class="feature"><span class="tag">COACH</span><h3>Find your next tenth</h3><p>Every lap is compared with your best, corner by corner: braking, apex speed, exits. One focus corner at a time until it's fixed.</p></div>
+        <div class="feature"><span class="tag">STRATEGY</span><h3>Fuel to the finish</h3><p>Live fuel per lap, laps to go, the pit window and what to add. It can even set the fuel in iRacing's pit menu for you.</p></div>
+        <div class="feature"><span class="tag">SETUPS</span><h3>Setup help that makes sense</h3><p>Say "it's understeering" or "it bottoms out" and get the garage change to try. Compare setups by the laps you drove on them.</p></div>
+        <div class="feature"><span class="tag">OVERLAYS</span><h3>Overlays for stream and screen</h3><p>Design your own from widgets, or start from a template: standings, relative, fuel, tyres, flags, track map and more. Add it to OBS in one click, or show it over iRacing while you drive.</p></div>
+        <div class="feature"><span class="tag">BROADCAST</span><h3>Race commentary for your stream</h3><p>Two commentators call the race like TV: overtakes, battles, pit stops, flags and the finish. Your viewers hear them through OBS or any streaming app; you don't.</p></div>
+        <div class="feature"><span class="tag">PAINT SHOP</span><h3>Paint your car, helmet and suit</h3><p>Start from iRacing's template and patterns, recolour, add numbers and logos, choose a finish from matte to chrome, and watch it change on your car in iRacing as you paint.</p></div>
+        <div class="feature"><span class="tag">TEAM</span><h3>Phone pit wall and team hub</h3><p>Live timing and strategy on your phone, and a team page your crew can follow from anywhere. Driver swaps and team messages are read out to the driver.</p></div>
+        <div class="feature"><span class="tag">DISCORD</span><h3>Results in your league's Discord</h3><p>Race results and session summaries with fuel use and tyre wear, personal bests, "going live" posts with your stream links, and a league bot for schedules and sign-ups.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="who">
+    <div class="wrap">
+      <div class="eyebrow">Who it's for</div>
+      <h2>For drivers, streamers <span>and teams.</span></h2>
+      <p class="section-lead">Grid Central speaks English, Spanish and German.</p>
+      <div class="who">
+        <div class="card"><h3>Drivers</h3><p>From your first race to an endurance stint: a spotter that never misses a car, a coach that finds your next tenth, and strategy that gets you to the flag.</p></div>
+        <div class="card"><h3>Streamers</h3><p>Overlays you design yourself, two commentators your viewers hear and you don't, and OBS control from Grid Central or your phone.</p></div>
+        <div class="card"><h3>Teams and leagues</h3><p>A phone pit wall and a team page your crew can follow from anywhere, driver swaps read out in the car, and results posted to your league's Discord.</p></div>
       </div>
     </div>
   </section>
@@ -145,74 +133,17 @@
         <figure><img src="site/spotter.png" alt="AI spotter page with the live radar, call log and corner coaching" loading="lazy" width="1416" height="774"><figcaption>AI spotter: live radar, calls and corner-by-corner coaching.</figcaption></figure>
         <figure><img src="site/strategy.png" alt="Race strategy page with fuel to the finish, stops needed and the pit window" loading="lazy" width="1416" height="774"><figcaption>Race strategy: fuel to the finish and the pit window, live.</figcaption></figure>
         <figure><img src="site/overlay.png" alt="Overlay designer with a race overlay and the widget list" loading="lazy" width="1416" height="774"><figcaption>Overlay designer: for OBS, or on your screen in iRacing.</figcaption></figure>
-        <figure><img src="site/setup.png" alt="Race setup page with the loaded setup and the setup advisor" loading="lazy" width="1416" height="774"><figcaption>Race setup: what's loaded, what changed, and what to try.</figcaption></figure>
         <figure><img src="site/commentary.png" alt="Commentary settings on the Broadcast page: whose race to follow, the two voices and how much they talk" loading="lazy" width="1376" height="774"><figcaption>Broadcast commentary: two voices on your stream, not in your ears.</figcaption></figure>
-        <figure><img src="site/team-hub.png" alt="The team page following a race, with a button for each driver sharing their car" loading="lazy" width="1176" height="808"><figcaption>Team page: your crew follows whoever is driving, from anywhere.</figcaption></figure>
       </div>
     </div>
   </section>
 
-  <section id="pricing">
+  <section class="closing">
     <div class="wrap">
-      <div class="eyebrow">Pricing</div>
-      <h2>Start as a Rookie, <span>step up when you're ready.</span></h2>
-      <p class="section-lead">Grid Central is in a closed beta. Plans open at launch, starting with a 7-day free trial of Driver, no card needed.</p>
-      <div class="plans">
-        <div class="card">
-          <h3>Rookie</h3>
-          <div class="price">$0</div>
-          <ul><li>Voice spotter and a simple radar: cars alongside, flags, hazards</li><li>Your session, track map, lap times and ratings</li><li>The in-game overlay with the core widgets</li><li>Every livery tool: the 3D Spray Booth, finishes, Live in iRacing, helmet and suit</li><li>Your Discord status</li></ul>
-        </div>
-        <div class="card is-pro">
-          <h3>Driver</h3>
-          <div class="price">Coming soon</div>
-          <ul><li>Your engineer and coach on the radio, and Talkback</li><li>Race strategy and setups</li><li>Lap comparison and telemetry</li><li>The full radar, every overlay widget and OBS overlays</li><li>The phone pit wall (one phone at a time), answered by voice</li><li>Discord posts</li><li>Monthly or yearly, one PC</li></ul>
-        </div>
-        <div class="card">
-          <h3>Race Team</h3>
-          <div class="price">Coming soon</div>
-          <ul><li>Driver for every driver in your team, each on their own PC</li><li>Team races, shared laps and crew links for teammates</li><li>A team hub that just works, no setup</li><li>The League room and its Discord bot</li><li>One bill: 3 drivers, then packs of 5</li></ul>
-        </div>
-      </div>
-      <p class="small">Streaming? The Broadcast add-on (AI race commentary, OBS control from Grid Central and your phone) adds to Driver or Race Team. Beta testers get 6 months of Driver free from launch day (started at checkout, with a card), then $6.99 a month while they stay subscribed.</p>
-    </div>
-  </section>
-
-  <section id="beta">
-    <div class="wrap split">
-      <div>
-        <div class="eyebrow">Closed beta</div>
-        <h2>Drive it <span>before launch.</span></h2>
-        <p class="section-lead">Testers get a personal beta code, the Setup download, and updates as they're released. Tell us what you race and we'll send you a code.</p>
-        <div class="actions" style="justify-content:flex-start">
-          <a class="button primary" href="mailto:support.gridcentral@gmail.com?subject=Grid%20Central%20beta">Ask for a beta code</a>
-          <a class="button" href="https://github.com/xr58ya/grid-central/releases/latest">Download (beta code needed)</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>What you need</h3>
-        <ul>
-          <li>Windows 10 or 11, 64-bit</li>
-          <li>iRacing</li>
-          <li>Microsoft Edge (built into Windows) for Grid Central's window and natural voices</li>
-          <li>A microphone and a free wheel button for Talkback (optional)</li>
-          <li>Internet once to download Talkback's speech model (about 40 MB)</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="wrap faq">
-      <div class="eyebrow">Questions</div>
-      <h2>Good to <span>know.</span></h2>
-      <details><summary>Does Grid Central work with iRacing's own spotter?</summary><p>Yes. Grid Central uses iRacing's live data on your PC, including when a car is alongside you, and adds its own engineer, coaching and strategy calls on top. You can turn any call type off.</p></details>
-      <details><summary>Does it send my data anywhere?</summary><p>Your laps, setups, paints and settings stay on your PC. Your account (your email, your plan and which PC it's on) is kept online so your plan works, and what you choose to share, such as the team hub or Discord posts, goes where you send it. The phone pit wall stays on your own network. Our <a href="privacy.html">privacy policy</a> has the details.</p></details>
-      <details><summary>How does it get data from iRacing?</summary><p>A small companion program reads iRacing's live telemetry on your PC, the same way other sim racing tools do. It only reads; it never changes anything in iRacing except the pit menu, and only when you ask it to.</p></details>
-      <details><summary>Windows says it doesn't recognise the Setup program.</summary><p>The beta isn't code-signed yet. Choose More info, then Run anyway. Signed releases are coming before launch.</p></details>
-      <details><summary>Will I hear the stream commentary while I drive?</summary><p>No. The commentary plays only into your stream: through the Grid Central overlay in OBS, or a sound device your streaming app captures. Your viewers hear it, and you hear only your spotter and engineer.</p></details>
-      <details><summary>Do I need an account?</summary><p>For the free trial and the paid plans, yes: an email and password, so your subscription can follow you to a new PC. Your laps, settings and paints still stay on your PC.</p></details>
-      <details><summary>Which languages does it speak?</summary><p>English, Spanish and German: the app, your engineer's voice, and Talkback.</p></details>
+      <div class="eyebrow">Coming soon</div>
+      <h2>Grid Central opens <span>to everyone soon.</span></h2>
+      <p>Questions, or want to hear when it opens? Email us at support.gridcentral@gmail.com.</p>
+      <a class="button" href="mailto:support.gridcentral@gmail.com?subject=Grid%20Central%3A%20help">Email us</a>
     </div>
   </section>
 </main>
@@ -221,14 +152,11 @@
   <div class="wrap">
     <span>© 2026 Grid Central</span>
     <span>Grid Central is an independent app and is not affiliated with or endorsed by iRacing.com Motorsport Simulations.</span>
-    <div class="links">
-      <a href="mailto:support.gridcentral@gmail.com?subject=Grid%20Central%3A%20help">Contact</a>
-      <a href="team.html">Team page</a>
-      <a href="https://github.com/xr58ya/grid-central/releases/latest">Download</a>
+    <nav class="links" aria-label="Legal">
       <a href="terms.html">Terms</a>
       <a href="privacy.html">Privacy</a>
       <a href="refunds.html">Refunds</a>
-    </div>
+    </nav>
   </div>
 </footer>
 </body>
