@@ -17,7 +17,7 @@
   :root {
     --bg: #101112; --surface: #17191a; --border: #2a2d2e;
     --text: #e9eae5; --muted: #9a9f98; --soft: #c4c7bf; --lime: #d2ff50; --lime-ink: #151810;
-    --font: 'DM Sans', 'Segoe UI', Arial, sans-serif; --display: 'Space Grotesk', 'DM Sans', sans-serif;
+    --font: 'Titillium Web', 'Segoe UI', Arial, sans-serif; --display: 'Titillium Web', 'Segoe UI', Arial, sans-serif; --brand: 'Space Grotesk', 'Titillium Web', sans-serif;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--font); }
@@ -27,7 +27,7 @@
 
   header { border-bottom: 1px solid var(--border); }
   header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; font: 700 15px var(--display); letter-spacing: 1.5px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 15px var(--brand); letter-spacing: 1.5px; }
   .brand img { width: 30px; height: 30px; }
   .soon { padding: 5px 12px; border: 1px solid var(--lime); border-radius: 999px; color: var(--lime); font: 700 12px var(--font); letter-spacing: 1.5px; text-transform: uppercase; }
 
@@ -37,14 +37,14 @@
 
   .hero { padding: 72px 0 40px; text-align: center; }
   .eyebrow { color: var(--lime); font: 700 12px var(--font); letter-spacing: 2px; text-transform: uppercase; }
-  h1 { font: 700 clamp(38px, 6vw, 64px)/1.05 var(--display); margin: 14px 0 18px; letter-spacing: -1px; }
+  h1 { font: 700 clamp(38px, 6vw, 64px)/1.05 var(--display); margin: 14px 0 18px; letter-spacing: -.4px; }
   h1 span, h2 span { color: var(--lime); }
   .lead { max-width: 640px; margin: 0 auto 14px; color: var(--soft); font-size: 18px; }
   .note { max-width: 640px; margin: 0 auto 28px; color: var(--muted); font-size: 15px; }
   .hero-shot { margin: 48px auto 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px #000a; }
 
   section { padding: 72px 0; border-top: 1px solid var(--border); }
-  h2 { font: 700 clamp(28px, 4vw, 40px)/1.15 var(--display); margin: 10px 0 14px; letter-spacing: -.5px; }
+  h2 { font: 700 clamp(28px, 4vw, 40px)/1.15 var(--display); margin: 10px 0 14px; letter-spacing: -.2px; }
   .section-lead { color: var(--soft); max-width: 640px; margin: 0 0 36px; }
 
   .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
