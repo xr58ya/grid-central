@@ -16,3 +16,4 @@ Windows may warn you that the Setup program isn't recognised (it isn't code-sign
 The `lap-library` folder holds reference laps that everyone with Grid Central can load and coach against
 (Lap data → Online · reference laps). To add one, tick the lap in Lap data and press **Prepare for the library**,
 then upload the saved lap file and the new `index.json` to this folder (replacing the old `index.json`).
+
