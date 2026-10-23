@@ -6,7 +6,9 @@
   const T = text => (window.gridLang ? window.gridLang.t(text) : text);
   $("#radio .empty").textContent = T($("#radio .empty").textContent);
   const params = new URLSearchParams(location.search);
-  const db = (params.get("db") || "").replace(/\/+$/, "");
+  // Only a Firebase Realtime Database address (a made-up link can't point the page anywhere else).
+  const asked = (params.get("db") || "").replace(/\/+$/, "");
+  const db = /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)?\.(firebaseio\.com|firebasedatabase\.app)$/.test(asked) ? asked : "";
   const room = params.get("room") || "";
   const base = `${db}/rooms/${encodeURIComponent(room)}`;
   // Your own hub: the car's live, strategy, radio and info. The Team plan's hosted hub: one of those per driver,
@@ -34,8 +36,10 @@
   }
 
   // ---- Live from the database (Firebase's streaming REST API) ----
+  const UNSAFE = new Set(["__proto__", "constructor", "prototype"]);
   function apply(path, value) {
-    const parts = path.split("/").filter(Boolean);
+    const parts = String(path || "").split("/").filter(Boolean);
+    if (parts.some(part => UNSAFE.has(part))) return;
     if (!parts.length) {
       Object.assign(data, { live: null, strategy: null, radio: null, info: null, cars: null }, value || {});
       return;
@@ -136,7 +140,7 @@
     banner.className = `banner ${flag ? flag[2] : "box"}${text ? "" : " hidden"}`;
     // Standings.
     $("#standings").innerHTML = field.length
-      ? `<thead><tr><th>P</th><th>#</th><th>DRIVER</th><th>${race ? "GAP" : "BEST"}</th><th>LAST</th></tr></thead><tbody>${field.map(car => `<tr class="${car.me ? "me" : ""}${car.pit ? " pit" : ""}"><td>${car.p}</td><td><span class="n" style="--cc:${esc(car.cc || "#666")}">${esc(car.n)}</span></td><td>${esc(short(car.name))}${car.pit ? " · PIT" : ""}</td>`
+      ? `<thead><tr><th>P</th><th>#</th><th>DRIVER</th><th>${race ? "GAP" : "BEST"}</th><th>LAST</th></tr></thead><tbody>${field.map(car => `<tr class="${car.me ? "me" : ""}${car.pit ? " pit" : ""}"><td>${num(car.p) ? car.p : ""}</td><td><span class="n" style="--cc:${/^#[0-9a-fA-F]{3,8}$/.test(car.cc) ? car.cc : "#666"}">${esc(car.n)}</span></td><td>${esc(short(car.name))}${car.pit ? " · PIT" : ""}</td>`
         + `<td>${race ? (car.p === 1 ? "Leader" : num(car.gap) && num(field[0].gap) ? `+${(car.gap - field[0].gap).toFixed(1)}` : "—") : lapTime(car.best)}</td><td>${lapTime(car.last)}</td></tr>`).join("")}</tbody>`
       : '<tbody><tr><td class="empty">Waiting for the car.</td></tr></tbody>';
     // Strategy.
