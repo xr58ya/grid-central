@@ -15,7 +15,7 @@
   // under cars/<driver>, and the page follows whoever is driving (or the one you pick).
   const data = { live: null, strategy: null, radio: null, info: null, cars: null };
   let picked = null;
-  const esc = text => String(text ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const esc = text => (typeof text === "string" || typeof text === "number" ? String(text) : "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const num = value => typeof value === "number" && Number.isFinite(value);
   const lapTime = s => (num(s) && s > 0 ? `${Math.floor(s / 60)}:${(s % 60).toFixed(3).padStart(6, "0")}` : "—");
   const clock = s => (num(s) && s >= 0 ? `${Math.floor(s / 3600) ? `${Math.floor(s / 3600)}:` : ""}${String(Math.floor((s % 3600) / 60)).padStart(Math.floor(s / 3600) ? 2 : 1, "0")}:${String(Math.floor(s % 60)).padStart(2, "0")}` : "");
@@ -36,10 +36,24 @@
   }
 
   // ---- Live from the database (Firebase's streaming REST API) ----
-  const UNSAFE = new Set(["__proto__", "constructor", "prototype"]);
-  function apply(path, value) {
+  // What a room sends comes from anyone with its link: it's kept to plain data (no keys that change how a value turns
+  // into text or what an object is), and each list and number is checked where it's used, so a car written wrong can't
+  // stop the page for everyone watching.
+  const UNSAFE = new Set(["__proto__", "constructor", "prototype", "toString", "valueOf", "toLocaleString", "toJSON"]);
+  function plain(value, depth = 0) {
+    if (Array.isArray(value)) return depth > 8 ? [] : value.map(item => plain(item, depth + 1));
+    if (value && typeof value === "object") {
+      const out = {};
+      if (depth <= 8) for (const [key, item] of Object.entries(value)) if (!UNSAFE.has(key)) out[key] = plain(item, depth + 1);
+      return out;
+    }
+    return value;
+  }
+  const list = value => (Array.isArray(value) ? value : []);
+  function apply(path, raw) {
     const parts = String(path || "").split("/").filter(Boolean);
     if (parts.some(part => UNSAFE.has(part))) return;
+    const value = plain(raw);
     if (!parts.length) {
       Object.assign(data, { live: null, strategy: null, radio: null, info: null, cars: null }, value || {});
       return;
@@ -81,8 +95,11 @@
       return data;
     }
     const now = Date.now() / 1000;
-    const cars = Object.entries(data.cars).map(([id, car]) => ({ id, ...(car || {}) })).filter(car => car.live && car.live.at);
-    const score = car => (car.live.connected && now - car.live.at < 15 ? 1e12 : 0) + car.live.at;
+    const cars = Object.entries(data.cars).map(([id, car]) => ({ id, ...(car && typeof car === "object" ? car : {}) }))
+      .filter(car => car.live && typeof car.live === "object" && num(car.live.at));
+    // Newest first, live ones first; a time from the future (a clock that's wrong, or made up) counts as none.
+    const at = car => (car.live.at <= now + 30 ? car.live.at : 0);
+    const score = car => (car.live.connected === true && now - at(car) < 15 ? 1e12 : 0) + at(car);
     cars.sort((a, b) => score(b) - score(a));
     const shown = cars.find(car => car.id === picked) || cars[0] || { live: null, strategy: null, radio: null, info: null };
     box.classList.toggle("hidden", cars.length < 2);
@@ -110,7 +127,7 @@
     $("#where").textContent = live.connected ? [live.driver, live.car, live.track, live.session && live.session.type].filter(Boolean).join(" · ")
       : !live.at ? "Waiting for Grid Central to start sharing." : !fresh ? "Grid Central hasn't sent anything for a while. It may be closed." : "The driver isn't in an iRacing session right now.";
     const l = live.live || {};
-    const field = (live.field || []).map(([p, cp, n, name, cls, cc, gap, last, best, pit, me]) => ({ p, cp, n, name, cls, cc, gap, last, best, pit, me }));
+    const field = list(live.field).filter(Array.isArray).map(([p, cp, n, name, cls, cc, gap, last, best, pit, me]) => ({ p, cp, n, name, cls, cc, gap, last, best, pit, me }));
     const me = field.find(car => car.me);
     const race = /race/i.test((live.session || {}).type || "");
     $("#pos").textContent = l.position ? `P${l.position}` : "—";
@@ -131,7 +148,7 @@
     $("#fuel").textContent = num(l.fuelL) ? (imperial ? `${(l.fuelL * 0.264172).toFixed(1)} gal` : `${l.fuelL.toFixed(1)} L`) : "—";
     $("#fuel-laps").textContent = src.strategy && num(src.strategy.lapsOfFuel) ? `${src.strategy.lapsOfFuel.toFixed(1)} laps` : "";
     // Banner: flags first, then the pit call.
-    const flags = new Set(l.flags || []);
+    const flags = new Set(list(l.flags));
     const flag = FLAGS.find(([name]) => flags.has(name));
     const boxIn = src.strategy && src.strategy.boxIn;
     const banner = $("#banner");
@@ -154,10 +171,10 @@
     }).join("");
     $("#team-line").textContent = s.team || "";
     // Radio (left alone by i18n.js, so the driver's own words stay as said; the car's calls come in English).
-    const radio = Array.isArray(src.radio) ? src.radio : Object.values(src.radio || {});
+    const radio = (Array.isArray(src.radio) ? src.radio : Object.values(src.radio && typeof src.radio === "object" ? src.radio : {})).filter(item => item && typeof item === "object");
     const said = item => (item.who === "driver" || !window.gridLang ? item.text : window.gridLang.speech(String(item.text || "")));
     $("#radio").innerHTML = radio.length
-      ? radio.slice().reverse().map(item => `<li class="${esc(item.who)}"><b>${esc(T(String(item.who || "radio").toUpperCase()))}${item.at ? ` · ${new Date(item.at * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : ""}</b>${esc(said(item))}</li>`).join("")
+      ? radio.slice().reverse().map(item => `<li class="${esc(item.who)}"><b>${esc(T(String(item.who || "radio").toUpperCase()))}${num(item.at) ? ` · ${new Date(item.at * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : ""}</b>${esc(said(item))}</li>`).join("")
       : `<li class="empty">${esc(T("Race calls and team messages appear here."))}</li>`;
   }
   setInterval(render, 5000); // notices when the car stops sending

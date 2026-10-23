@@ -6,9 +6,7 @@
 <title>Privacy policy · Grid Central</title>
 <meta name="description" content="What Grid Central keeps on your PC, what it sends, who it shares it with, and how to see or delete your data.">
 <link rel="icon" href="site/icon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site/fonts/fonts.css">
 <link rel="stylesheet" href="site/legal.css">
 </head>
 <body>
@@ -25,7 +23,7 @@
 
 <main>
   <h1>Privacy policy</h1>
-  <p class="updated">Last updated 20 October 2026</p>
+  <p class="updated">Last updated 23 October 2026</p>
 
   <section class="short" aria-labelledby="short-h">
     <h2 id="short-h">The short version</h2>
@@ -57,27 +55,37 @@
         <tr>
           <th scope="row">Account: your email, password, account ID and the date you signed up</th>
           <td data-label="Why">To sign you in and keep your plan</td>
-          <td data-label="Where">Google Firebase. Firebase stores your password scrambled (hashed), so we can't see it.</td>
+          <td data-label="Where">The sign-in is with Google Firebase, which stores your password scrambled (hashed), so we can't see it. Your account record is on our server at Cloudflare.</td>
         </tr>
         <tr>
-          <th scope="row">Your PCs: a random ID for each PC, and the PC's name as Windows reports it (for example "RACING-PC")</th>
+          <th scope="row">Your PCs: a random ID for each PC, the PC's name as Windows reports it (for example "RACING-PC"), and fingerprints of its hardware, made from its motherboard's and system disk's IDs in a way that can't be turned back into them</th>
           <td data-label="Why">So a subscription works on one PC at a time and you can see which one has it, and so the free trial is once per PC</td>
-          <td data-label="Where">Google Firebase</td>
+          <td data-label="Where">Our server at Cloudflare</td>
+        </tr>
+        <tr>
+          <th scope="row">Moving your subscription to another PC: when, and the two PCs' IDs and the new one's name</th>
+          <td data-label="Why">A subscription can move a few times in 30 days, and we email you each time it moves, so you'd know if someone else moved it</td>
+          <td data-label="Where">Our server at Cloudflare; the email goes through Resend</td>
+        </tr>
+        <tr>
+          <th scope="row">When you start a free trial, a fingerprint of your internet address (not the address itself) and a fingerprint of your email address, made with a secret key only our server has, so it can't be matched to your email anywhere else; and short-lived counts of some requests (new accounts, checkouts, beta code tries and Manage subscription)</th>
+          <td data-label="Why">To stop the free trial and these requests being misused</td>
+          <td data-label="Where">Our server at Cloudflare</td>
         </tr>
         <tr>
           <th scope="row">Your plan: plan, end dates, free months, and any beta code you claimed (stored as a fingerprint, with the date)</th>
           <td data-label="Why">To give you what you paid for</td>
-          <td data-label="Where">Google Firebase</td>
+          <td data-label="Where">Our server at Cloudflare</td>
         </tr>
         <tr>
-          <th scope="row">Purchases: Lemon Squeezy's subscription and customer numbers, product, status, renewal and trial dates, quantity, and the email you bought with</th>
-          <td data-label="Why">To match a purchase to your account, and for our business records</td>
-          <td data-label="Where">Google Firebase, written by our payments server on Cloudflare. Lemon Squeezy keeps your name, billing address and payment details under <a href="https://www.lemonsqueezy.com/privacy">its own privacy policy</a>; we never receive card details.</td>
+          <th scope="row">Purchases: Lemon Squeezy's subscription, payment and customer numbers, product, monthly or yearly, status, start, renewal, trial and end dates, quantity, each payment's amount, tax and any refund, whether it was paid by card, the country you bought from, and the email you bought with; and the messages Lemon Squeezy sends us about them, as it sent them (they include your name and email)</th>
+          <td data-label="Why">To match a purchase to your account, to cancel and refund a second subscription for something you already have (and email you about it), and for our business records and sales figures</td>
+          <td data-label="Where">Our server at Cloudflare. Lemon Squeezy keeps your name, billing address and payment details under <a href="https://www.lemonsqueezy.com/privacy">its own privacy policy</a>; we never receive card details.</td>
         </tr>
         <tr>
-          <th scope="row">Race Team: the team's name and owner, its drivers' names and sign-in emails, the seats in use, and the team's private hub room</th>
+          <th scope="row">Race Team: the team's name and owner, its drivers' sign-in emails, the seats in use, and the team's private hub room</th>
           <td data-label="Why">To run the team and give its drivers their seats</td>
-          <td data-label="Where">Google Firebase</td>
+          <td data-label="Where">Our server at Cloudflare</td>
         </tr>
         <tr>
           <th scope="row">Team hub, only while you have it turned on: every 2 seconds while you drive, your iRacing name, car and number, track and session, position, lap times, fuel, incidents, flags and temperatures; the cars around you, with their drivers' names, gaps and lap times; and your engineer's recent radio calls. Also team chat messages, with the name entered on each.</th>
@@ -92,8 +100,8 @@
       </tbody>
     </table>
   </div>
-  <p>The help desk form uses Cloudflare Turnstile to check that a person is sending it. It looks at your browser and connection.</p>
-  <p>When we confirm a problem, we may list a short description of it on our public GitHub tracker, written by us, never with your email address, files, or names and file paths from your logs.</p>
+  <p>The help desk form, and creating an account in Grid Central, use Cloudflare Turnstile to check that a person is doing it. It looks at your browser and connection.</p>
+  <p>Signing in on this website, to buy or manage a plan, uses your Grid Central account. The sign-in is kept only in that browser tab, until you sign out or close it.</p>
 
   <h2 id="iracing">4. Signing in with iRacing</h2>
   <p>If you sign in with iRacing, you do it on iRacing's own page, and we never see your iRacing password. The sign-in is kept only on your PC, encrypted to your Windows account. Grid Central uses it to fetch your results and ratings, which stay on your PC. Signing out cancels the sign-in at iRacing too.</p>
@@ -114,8 +122,7 @@
   <h2 id="downloads">7. Downloads and online content</h2>
   <p>When Grid Central downloads something, the server it downloads from sees your IP address and basic details about the request, as any website does. No account details are sent, and we don't receive this information.</p>
   <ul>
-    <li><strong>GitHub:</strong> updates, the beta code list, the lap library and the commentary voices. GitHub also hosts the team page that Grid Central links to.</li>
-    <li><strong>Alpha Cephei</strong> (alphacephei.com): Talkback's speech model, downloaded once.</li>
+    <li><strong>GitHub:</strong> updates, the beta code list, the lap library, the commentary voices and Talkback's speech models. GitHub also hosts the team page that Grid Central links to.</li>
     <li><strong>iRacing:</strong> track map shapes.</li>
     <li><strong>Google Fonts:</strong> the fonts in Grid Central, its overlay and this website.</li>
     <li><strong>jsDelivr:</strong> a library the paint shop loads to open Photoshop (.psd) files.</li>
@@ -127,9 +134,9 @@
     <table>
       <thead><tr><th scope="col">Provider</th><th scope="col">What for</th></tr></thead>
       <tbody>
-        <tr><th scope="row"><a href="https://firebase.google.com/support/privacy">Google Firebase</a></th><td data-label="What for">Accounts, plans, teams and the team hub</td></tr>
-        <tr><th scope="row"><a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a></th><td data-label="What for">This website, our payments server, the help desk's tickets, files and spam check, and forwarding email sent to support@gridcentral.store</td></tr>
-        <tr><th scope="row"><a href="https://resend.com/legal/privacy-policy">Resend</a></th><td data-label="What for">Sending help desk emails: your ticket number and our replies</td></tr>
+        <tr><th scope="row"><a href="https://firebase.google.com/support/privacy">Google Firebase</a></th><td data-label="What for">Sign-in and the team hub</td></tr>
+        <tr><th scope="row"><a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a></th><td data-label="What for">This website, our server (accounts, plans, teams and purchases), the help desk's tickets, files and spam check, and forwarding email sent to support@gridcentral.store</td></tr>
+        <tr><th scope="row"><a href="https://resend.com/legal/privacy-policy">Resend</a></th><td data-label="What for">Sending our emails: when your subscription moves to another PC, when a second subscription is cancelled and refunded, and the help desk's (your ticket number and our replies)</td></tr>
         <tr><th scope="row"><a href="https://www.lemonsqueezy.com/privacy">Lemon Squeezy</a></th><td data-label="What for">Selling subscriptions, as merchant of record. Lemon Squeezy is responsible for the payment details it collects.</td></tr>
         <tr><th scope="row"><a href="https://policies.google.com/privacy">Google</a></th><td data-label="What for">Support email (Gmail)</td></tr>
         <tr><th scope="row"><a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub</a></th><td data-label="What for">Downloads, updates and the team page</td></tr>
@@ -143,10 +150,12 @@
 
   <h2 id="how-long">10. How long we keep it</h2>
   <ul>
-    <li><strong>Account, plan and team data:</strong> while you have an account. If you ask us to delete your account, we delete this data within 30 days.</li>
-    <li><strong>The free trial record:</strong> after an account is deleted, we keep the PC's random ID (without your email) so the free trial stays once per PC.</li>
-    <li><strong>Purchase records:</strong> as long as tax and accounting law requires (in Australia, generally 5 years).</li>
-    <li><strong>Team hub:</strong> your car's data is replaced every 2 seconds while you drive. Team chat stays in the team's room until you ask us to delete it.</li>
+    <li><strong>Account, plan and team data:</strong> while you have an account. <strong>Delete my account</strong> in Grid Central (Settings → Account) deletes it straight away, with a team you own; if you ask us instead, we delete it within 30 days.</li>
+    <li><strong>The free trial record and beta codes:</strong> after an account is deleted, we keep the PC's random ID, its hardware fingerprints, the internet address fingerprint, the email address fingerprint and the fingerprint of a beta code it used (without your account or email), so the free trial stays once per PC and once per email address, and each beta code is used once. <strong>Download my data</strong> includes these fingerprints while you have an account.</li>
+    <li><strong>Moves to another PC:</strong> while you have an account; deleting your account deletes them.</li>
+    <li><strong>Counts of requests:</strong> 2 days.</li>
+    <li><strong>Purchase records</strong>, Lemon Squeezy's messages about them included: as long as tax and accounting law requires (in Australia, generally 5 years).</li>
+    <li><strong>Team hub:</strong> your car's data is replaced every 2 seconds while you drive. Team chat stays in the team's room until you ask us to delete it. Deleting your account removes your car from your team's room, and the room itself if the team is yours.</li>
     <li><strong>Help desk tickets and support emails:</strong> up to 1 year after the conversation ends, unless you ask us to delete them sooner. Resend keeps its own record of the emails it sent for a limited time.</li>
   </ul>
 
@@ -158,7 +167,7 @@
     <li>delete it, along with your account;</li>
     <li>stop or limit some uses of it.</li>
   </ul>
-  <p>Email <a href="mailto:support@gridcentral.store">support@gridcentral.store</a> from the address on your account, and we'll reply within 30 days.</p>
+  <p>In Grid Central, <strong>Download my data</strong> (Settings → Account) saves a copy of what our server holds about your account, and <strong>Delete my account</strong> deletes it and cancels your subscriptions. You can also email <a href="mailto:support@gridcentral.store">support@gridcentral.store</a> from the address on your account, and we'll reply within 30 days.</p>
   <p>To delete a help desk ticket, email support from the address you used, with its ticket number (for example GC-1001). We'll delete the ticket, its files and history, and the emails about it in our inbox.</p>
   <p>If you're in the EU, EEA or UK, we use your information to provide the service you asked for, to keep Grid Central secure and the free trial fair (our legitimate interests), and to meet legal duties. Optional features, such as the team hub and Discord, run only when you turn them on, and you can turn them off at any time.</p>
   <p>If you're unhappy with how we've handled your information, please tell us first. In Australia, you can also complain to the <a href="https://www.oaic.gov.au/">Office of the Australian Information Commissioner</a>. In the EU, EEA or UK, you can complain to your local data protection authority.</p>
