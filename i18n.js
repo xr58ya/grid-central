@@ -61,11 +61,12 @@
     if (found !== null) return found;
     const [key] = template(clean);
     if (known.has(key)) return null; // already translated
-    // Several sentences together ("P7. Gap ahead 1.2. Behind 0.8."): one at a time, if each one is known.
+    // Several sentences together ("P7. Gap ahead 1.2. Behind 0.8.", "On <strong>Hard</strong> tyres, 12 laps old.
+    // Wear is measured…"): one at a time, if each one is known.
     const inner = clean.match(/^<(strong|b|em)>([^<]*)<\/\1>$/);
     const plain = inner ? inner[2] : clean;
-    if (!plain.includes("<") && /[.!?] /.test(plain)) {
-      const sentences = plain.split(/(?<=[.!?])\s+/);
+    const sentences = sentencesOf(plain);
+    if (sentences.length > 1) {
       const parts = sentences.map(sentence => (hasWords(sentence) ? exact(sentence) ?? patterned(sentence) : sentence));
       if (parts.every(part => part !== null)) {
         const joined = parts.join(" ");
@@ -79,26 +80,91 @@
     missing.add(key);
     return null;
   }
-  // Labels built from parts ("<small>Left front · Camber</small><b>2.1 deg</b>"): each bit of text between the tags
-  // and the " · " separators on its own. Names and numbers stay as they are.
+  // A text's sentences: split after ". ", "! " or "? ", but not inside a tag's text ("<strong>P3. Box.</strong>"). A
+  // sentence can end just inside a tag ("<strong>Done.</strong> Next one.").
+  function sentencesOf(text) {
+    if (!text.includes("<")) return text.split(/(?<=[.!?])\s+/);
+    const out = [];
+    let current = "";
+    let depth = 0;
+    let last = ""; // the last letter or mark before this point
+    for (const token of text.split(/(<[^>]+>)/)) {
+      if (!token) continue;
+      if (token.startsWith("<")) {
+        if (token.startsWith("</")) depth = Math.max(0, depth - 1);
+        else if (!/^<br\b/i.test(token) && !token.endsWith("/>")) depth++;
+        current += token;
+        continue;
+      }
+      if (depth) {
+        current += token;
+      } else {
+        let rest = token;
+        if (/^\s/.test(rest) && /[.!?]/.test(last) && current.trim()) {
+          out.push(current.trim());
+          current = "";
+          rest = rest.trimStart();
+        }
+        const bits = rest.split(/(?<=[.!?])\s+/);
+        bits.forEach((bit, i) => {
+          current += bit;
+          if (i < bits.length - 1) {
+            out.push(current.trim());
+            current = "";
+          }
+        });
+      }
+      if (token.trim()) last = token.trimEnd().slice(-1);
+    }
+    if (current.trim()) out.push(current.trim());
+    return out;
+  }
+  // Labels built from parts ("<small>Left front · Camber</small><b>2.1 deg</b>", "· 3 sessions here"): each bit of
+  // text between the tags and the "·" separators on its own. Names and numbers stay as they are. The text between two
+  // tags is tried whole first, so a label with " · " in it is one label ("<i></i> TRIAL · 7 DAYS LEFT", a chip with its dot).
+  const DOT = /((?:^|\s)·(?:\s|$))/;
   function pieces(clean) {
-    if (!clean.includes("<") && !clean.includes(" · ")) return null;
+    if (!clean.includes("<") && !DOT.test(clean)) return null;
     let changed = false;
-    const out = clean.split(/(<[^>]+>)/).map(part => (part.startsWith("<") ? part : part.split(" · ").map(bit => {
+    const one = bit => {
       const text = bit.trim();
-      if (!hasWords(text)) return bit;
+      if (!hasWords(text)) return null;
       const found = exact(text) ?? patterned(text);
-      if (found === null) return bit;
-      changed = true;
-      return bit.replace(text, () => found);
-    }).join(" · "))).join("");
+      return found === null ? null : bit.replace(text, () => found);
+    };
+    const out = clean.split(/(<[^>]+>)/).map(part => {
+      if (part.startsWith("<")) return part;
+      const whole = part !== clean && DOT.test(part) ? one(part) : null;
+      if (whole !== null) {
+        changed = true;
+        return whole;
+      }
+      return part.split(DOT).map(bit => {
+        const found = DOT.test(bit) ? null : one(bit);
+        if (found === null) return bit;
+        changed = true;
+        return found;
+      }).join("");
+    }).join("");
     return changed ? out : null;
   }
+  // A pattern's function can return null: not this pattern after all, so the next one is tried.
   function patterned(text) {
     for (const [pattern, replacement] of patterns) {
-      if (pattern.test(text)) return text.replace(pattern, replacement);
+      const match = text.match(pattern);
+      if (!match) continue;
+      if (typeof replacement !== "function") return text.replace(pattern, replacement);
+      const made = replacement(...match, match.index, text);
+      if (made === null || made === undefined) continue;
+      return text.slice(0, match.index) + made + text.slice(match.index + match[0].length);
     }
     return null;
+  }
+  // A word with two meanings has its own entry for one of them: inside data-i18n-context="setup wizard", "Finish" is
+  // looked up as "Finish (setup wizard)" first ("Finish" on its own is a paint finish).
+  function inContext(el, html) {
+    const holder = el.closest && el.closest("[data-i18n-context]");
+    return holder ? exact(`${norm(html)} (${holder.getAttribute("data-i18n-context")})`) : null;
   }
 
   // Page titles ("Race <span>strategy.</span>") are one sentence too.
@@ -113,7 +179,7 @@
       if (done.get(el) === html || !hasWords(el.textContent)) return;
       const spaced = /^\s/.test(html) ? " " : "";
       const trailing = /\s$/.test(html) ? " " : "";
-      const result = lookup(html);
+      const result = inContext(el, html) ?? lookup(html);
       if (result !== null) {
         const out = spaced + result + trailing;
         el.innerHTML = out;
