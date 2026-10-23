@@ -97,13 +97,15 @@
     const now = Date.now() / 1000;
     const cars = Object.entries(data.cars).map(([id, car]) => ({ id, ...(car && typeof car === "object" ? car : {}) }))
       .filter(car => car.live && typeof car.live === "object" && num(car.live.at));
-    // Newest first, live ones first; a time from the future (a clock that's wrong, or made up) counts as none.
-    const at = car => (car.live.at <= now + 30 ? car.live.at : 0);
-    const score = car => (car.live.connected === true && now - at(car) < 15 ? 1e12 : 0) + at(car);
+    // Newest first, live ones first. A time ahead of this clock (the driver's PC clock is fast) counts as now: only the
+    // team's own drivers can send a car (the team hub's rules), so it can't be used to jump ahead of the others.
+    const at = car => Math.min(car.live.at, now);
+    const live = car => car.live.connected === true && now - at(car) < 15;
+    const score = car => (live(car) ? 1e12 : 0) + at(car);
     cars.sort((a, b) => score(b) - score(a));
     const shown = cars.find(car => car.id === picked) || cars[0] || { live: null, strategy: null, radio: null, info: null };
     box.classList.toggle("hidden", cars.length < 2);
-    box.innerHTML = cars.map(car => `<button type="button" data-car="${esc(car.id)}" class="${car.id === shown.id ? "on" : ""}${car.live.connected && now - car.live.at < 15 ? " live" : ""}"><i></i>${esc(car.live.driver || T("Driver"))}</button>`).join("");
+    box.innerHTML = cars.map(car => `<button type="button" data-car="${esc(car.id)}" class="${car.id === shown.id ? "on" : ""}${live(car) ? " live" : ""}"><i></i>${esc(car.live.driver || T("Driver"))}</button>`).join("");
     return shown;
   }
   $("#cars").addEventListener("click", event => {
