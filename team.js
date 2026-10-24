@@ -17,6 +17,9 @@
   let picked = null;
   const esc = text => (typeof text === "string" || typeof text === "number" ? String(text) : "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const num = value => typeof value === "number" && Number.isFinite(value);
+  // How far ahead of this clock a car's time may be (the driver's PC clock is fast) and still count as now, in seconds.
+  // Further ahead, it counts as nothing sent: a car that stopped sending mustn't stay live until this clock catches up.
+  const AHEAD = 120;
   const lapTime = s => (num(s) && s > 0 ? `${Math.floor(s / 60)}:${(s % 60).toFixed(3).padStart(6, "0")}` : "—");
   const clock = s => (num(s) && s >= 0 ? `${Math.floor(s / 3600) ? `${Math.floor(s / 3600)}:` : ""}${String(Math.floor((s % 3600) / 60)).padStart(Math.floor(s / 3600) ? 2 : 1, "0")}:${String(Math.floor(s % 60)).padStart(2, "0")}` : "");
   const short = name => {
@@ -97,9 +100,8 @@
     const now = Date.now() / 1000;
     const cars = Object.entries(data.cars).map(([id, car]) => ({ id, ...(car && typeof car === "object" ? car : {}) }))
       .filter(car => car.live && typeof car.live === "object" && num(car.live.at));
-    // Newest first, live ones first. A time ahead of this clock (the driver's PC clock is fast) counts as now: only the
-    // team's own drivers can send a car (the team hub's rules), so it can't be used to jump ahead of the others.
-    const at = car => Math.min(car.live.at, now);
+    // Newest first, live ones first (a time up to AHEAD ahead of this clock counting as now, one further ahead as none).
+    const at = car => (car.live.at - now > AHEAD ? 0 : Math.min(car.live.at, now));
     const live = car => car.live.connected === true && now - at(car) < 15;
     const score = car => (live(car) ? 1e12 : 0) + at(car);
     cars.sort((a, b) => score(b) - score(a));
@@ -121,7 +123,8 @@
     const info = src.info || {};
     $("#team").textContent = info.name || live.team || "Team hub";
     document.title = `${info.name || "Grid Central"} · ${T("Team hub")}`;
-    const fresh = live.at && Date.now() / 1000 - live.at < 15;
+    const ago = Date.now() / 1000 - live.at;
+    const fresh = live.at && ago < 15 && ago >= -AHEAD;
     if (!live.at) setState("WAITING FOR THE CAR");
     else if (!fresh) setState("NOT SENDING", "bad");
     else if (!live.connected) setState("NOT IN IRACING");
