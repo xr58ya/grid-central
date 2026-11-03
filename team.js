@@ -1,18 +1,20 @@
-// Grid Central team hub: follows a car live from its room in a Firebase Realtime Database (the address and room
-// come in the link Grid Central gives the driver: team.html?db=...&room=...), and sends messages to the driver.
+// Grid Central team hub: follows a car live from its room in Grid Central's hosted Firebase Realtime Database (the room
+// comes in the link Grid Central gives the driver: team.html?room=...), and sends messages to the driver.
 (() => {
   const $ = selector => document.querySelector(selector);
   // Text on the page is translated by i18n.js (team.html?...&lang=es) as it changes; T() is for text it can't see.
   const T = text => (window.gridLang ? window.gridLang.t(text) : text);
   $("#radio .empty").textContent = T($("#radio .empty").textContent);
   const params = new URLSearchParams(location.search);
-  // Only a Firebase Realtime Database address (a made-up link can't point the page anywhere else).
-  const asked = (params.get("db") || "").replace(/\/+$/, "");
-  const db = /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)?\.(firebaseio\.com|firebasedatabase\.app)$/.test(asked) ? asked : "";
-  const room = params.get("room") || "";
+  // The hosted hub's database, always (the same as account.js HUB_DATABASE and this page's CSP). A ?db= in the link is
+  // ignored, so a made-up link can't point the page anywhere else; links made before this still carry the hosted one.
+  const db = "https://grid-central-accounts-default-rtdb.firebaseio.com";
+  // A room is 24 to 40 letters and digits (the same as worker/src/hub.js ROOM).
+  const asked = params.get("room") || "";
+  const room = /^[A-Za-z0-9]{24,40}$/.test(asked) ? asked : "";
   const base = `${db}/rooms/${encodeURIComponent(room)}`;
-  // Your own hub: the car's live, strategy, radio and info. The Team plan's hosted hub: one of those per driver,
-  // under cars/<driver>, and the page follows whoever is driving (or the one you pick).
+  // The hosted hub: the car's live, strategy, radio and info, one set per driver under cars/<driver>, and the page
+  // follows whoever is driving (or the one you pick). The room-level set is the older layout, read until old rooms are gone.
   const data = { live: null, strategy: null, radio: null, info: null, cars: null };
   let picked = null;
   const esc = text => (typeof text === "string" || typeof text === "number" ? String(text) : "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -32,7 +34,7 @@
     chip.innerHTML = `<i></i> ${esc(text)}`;
   }
 
-  if (!db || !room) {
+  if (!room) {
     setState("NO LINK", "bad");
     $("#where").textContent = "Open this page with the team link from Grid Central (Settings → Phone & team hub → Copy team link).";
     return;
