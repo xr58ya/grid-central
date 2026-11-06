@@ -1,163 +1,265 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
-<title>Grid Central · Your race engineer for iRacing</title>
-<meta name="description" content="Grid Central is a race engineer for iRacing on Windows: a voice spotter, driver coach, live fuel strategy, setup help, overlays, stream commentary and a paint shop. Coming soon.">
-<meta property="og:title" content="Grid Central · Your race engineer for iRacing">
-<meta property="og:description" content="Voice spotter, driver coach, live strategy, setups, overlays, stream commentary and more, for iRacing on Windows. Coming soon.">
-<meta property="og:image" content="site/overview.png">
+<title>Grid Central · Coming Soon</title>
+<meta name="description" content="Grid Central is your race engineer for iRacing on Windows: it calls the cars around you, coaches you corner by corner, works out your fuel and pit stops, and answers when you ask. Coming soon.">
+<meta property="og:title" content="Grid Central · Coming Soon">
+<meta property="og:description" content="Your race engineer, in your ear: a voice spotter, driver coach, live fuel strategy and TV-style overlays for iRacing on Windows. Coming soon.">
+<meta property="og:image" content="https://gridcentral.store/site/overview.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gridcentral.store/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="site/icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="site/fonts/fonts.css">
-<!-- The coming soon page (owner, 20 Oct 2026): what Grid Central is and who it's for, until the full site (index.html
-     in dist\GitHub upload, with the shop) goes up at launch. Upload it to the website as index.html. -->
+<!-- The coming soon page (owner's new design, 6 Nov 2026; it replaces the one from 20 Oct): what Grid Central is, until
+     the full site (index.html in dist\GitHub upload, with the shop) goes up at launch. Upload it to the website as
+     index.html, with site/fonts, site/hero.jpg, site/band.jpg and site/overlay-themes.jpg. Fonts are bundled
+     (site/fonts/fonts.css), so nothing is fetched from Google. The two race photos are the owner's own screenshots (6 Nov,
+     their Grid Central GR86); the stand-ins in the design samples were iRacing's, from iracing.com, and can't be used. -->
 <style>
   :root {
-    --bg: #101112; --surface: #17191a; --border: #2a2d2e;
-    --text: #e9eae5; --muted: #9a9f98; --soft: #c4c7bf; --lime: #d2ff50; --lime-ink: #151810;
-    --font: 'Titillium Web', 'Segoe UI', Arial, sans-serif; --display: 'Titillium Web', 'Segoe UI', Arial, sans-serif; --brand: 'Space Grotesk', 'Titillium Web', sans-serif;
+    --bg: #0b0c0d; --s1: #131517; --s2: #1a1d20; --line: #262a2d;
+    --text: #eef0ec; --muted: #8d938f; --g: #5ebb47; --g2: #86e06a; --red: #e5322d;
+    --cond: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+    --body: 'Titillium Web', 'Segoe UI', sans-serif;
+    --brand: 'Space Grotesk', 'Segoe UI', sans-serif;
   }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--font); }
-  a { color: inherit; }
-  img { max-width: 100%; height: auto; display: block; }
-  .wrap { width: min(1120px, 100% - 32px); margin: 0 auto; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font: 400 17px/1.6 var(--body); overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  .wrap { width: min(1180px, 100% - 48px); margin: 0 auto; }
 
-  header { border-bottom: 1px solid var(--border); }
-  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; font: 700 15px var(--brand); letter-spacing: 1.5px; }
-  .brand img { width: 30px; height: 30px; }
-  .soon { padding: 5px 12px; border: 1px solid var(--lime); border-radius: 999px; color: var(--lime); font: 700 12px var(--font); letter-spacing: 1.5px; text-transform: uppercase; }
+  .ribbon-unused { background: #f2c94c; color: #1a1500; font: 600 13px/1.4 var(--body); text-align: center; padding: 6px 16px; }
 
-  .button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 6px; font: 600 15px var(--font); text-decoration: none; border: 1px solid var(--lime); background: var(--lime); color: var(--lime-ink); }
-  .button:hover { filter: brightness(1.05); }
-  .button:focus-visible, a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+  /* nav */
+  nav { position: absolute; left: 0; right: 0; z-index: 10; }
+  nav .wrap { display: flex; align-items: center; gap: 36px; height: 76px; }
+  .logo { display: flex; align-items: center; gap: 10px; font: 700 18px var(--brand); letter-spacing: .06em; }
+  nav ul { display: flex; gap: 28px; list-style: none; margin-left: auto; font-weight: 600; font-size: 15px; color: #c9cdc9; }
+  nav ul a:hover { color: #fff; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; font: 700 15px var(--body); padding: 12px 22px; border-radius: 4px; transition: background .2s, transform .2s; }
+  .btn-g { background: var(--g); color: #07130a; }
+  .btn-g:hover { background: var(--g2); transform: translateY(-1px); }
+  .btn-o { border: 1px solid rgba(255,255,255,.28); color: #fff; }
+  .btn-o:hover { border-color: #fff; }
 
-  .hero { padding: 72px 0 40px; text-align: center; }
-  .eyebrow { color: var(--lime); font: 700 12px var(--font); letter-spacing: 2px; text-transform: uppercase; }
-  h1 { font: 700 clamp(38px, 6vw, 64px)/1.05 var(--display); margin: 14px 0 18px; letter-spacing: -.4px; }
-  h1 span, h2 span { color: var(--lime); }
-  .lead { max-width: 640px; margin: 0 auto 14px; color: var(--soft); font-size: 18px; }
-  .note { max-width: 640px; margin: 0 auto 28px; color: var(--muted); font-size: 15px; }
-  .hero-shot { margin: 48px auto 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px #000a; }
+  /* hero */
+  .hero { position: relative; min-height: 94vh; display: flex; align-items: center;
+    background: linear-gradient(90deg, rgba(11,12,13,.97) 0%, rgba(11,12,13,.82) 34%, rgba(11,12,13,.15) 68%, rgba(11,12,13,.05) 100%),
+                url(site/hero.jpg) 30% center / cover; }
+  .hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 180px; background: linear-gradient(transparent, var(--bg)); }
+  .hero .wrap { position: relative; z-index: 2; padding: 130px 0 120px; }
+  .live { display: inline-flex; align-items: center; gap: 10px; font: 700 13px var(--cond); letter-spacing: .14em; text-transform: uppercase; }
+  .live b { background: var(--g); color: #07130a; padding: 3px 9px; border-radius: 2px; }
+  .live span { color: #c9cdc9; }
+  h1 { font: italic 800 clamp(3.2rem, 7.4vw, 6.6rem)/.9 var(--cond); text-transform: uppercase; margin: 22px 0 26px; max-width: 9.5em; }
+  h1 em { color: var(--g); font-style: inherit; display: block; }
+  .hero p { max-width: 520px; color: #c3c8c4; font-size: 19px; }
+  .hero .ctas { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
 
-  section { padding: 72px 0; border-top: 1px solid var(--border); }
-  h2 { font: 700 clamp(28px, 4vw, 40px)/1.15 var(--display); margin: 10px 0 14px; letter-spacing: -.2px; }
-  .section-lead { color: var(--soft); max-width: 640px; margin: 0 0 36px; }
+  .lower-third { position: absolute; z-index: 3; right: max(24px, calc((100% - 1180px) / 2)); bottom: 70px; display: flex; align-items: stretch; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+  .lower-third .who { background: var(--g); color: #07130a; font: italic 800 15px/1 var(--cond); letter-spacing: .08em; padding: 14px 14px; display: flex; align-items: center; }
+  .lower-third .say { background: rgba(14,16,17,.92); backdrop-filter: blur(6px); padding: 10px 18px; display: flex; align-items: center; gap: 16px; font: 600 17px var(--cond); }
+  .wave { display: flex; gap: 3px; align-items: center; height: 22px; }
+  .wave i { width: 3px; background: var(--g); border-radius: 2px; animation: wv 1s ease-in-out infinite; }
+  .wave i:nth-child(1) { height: 30%; } .wave i:nth-child(2) { height: 80%; animation-delay: -.2s; } .wave i:nth-child(3) { height: 55%; animation-delay: -.5s; }
+  .wave i:nth-child(4) { height: 100%; animation-delay: -.7s; } .wave i:nth-child(5) { height: 40%; animation-delay: -.3s; }
+  @keyframes wv { 50% { transform: scaleY(.35); } }
 
-  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-  .feature, .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
-  .feature h3, .card h3 { font: 600 18px var(--display); margin: 0 0 8px; }
-  .feature p, .card p { margin: 0; color: var(--soft); font-size: 15px; }
-  .tag { display: inline-block; margin-bottom: 12px; color: var(--lime); font: 700 12px var(--font); letter-spacing: 1.5px; }
+  /* stats strip */
+  .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--s1); }
+  .strip .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 28px 24px; border-left: 1px solid var(--line); }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  .stat b { display: block; font: italic 800 38px/1 var(--cond); color: #fff; }
+  .stat span { color: var(--muted); font-size: 15px; }
 
-  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .gallery figure { margin: 0; }
-  .gallery img { border: 1px solid var(--border); border-radius: 10px; }
-  .gallery figcaption { color: var(--muted); font-size: 14px; margin-top: 10px; }
+  /* sectors */
+  section { padding: 110px 0; }
+  .eyebrow { font: 700 13px var(--cond); letter-spacing: .18em; text-transform: uppercase; color: var(--g); }
+  h2 { font: italic 800 clamp(2.3rem, 4.4vw, 3.6rem)/.98 var(--cond); text-transform: uppercase; margin: 12px 0 20px; }
+  .lead { color: #b9beba; max-width: 620px; font-size: 18px; }
+  .sector { display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; align-items: center; margin-top: 90px; }
+  .sector.flip { grid-template-columns: 1.25fr 1fr; }
+  .sector.flip .txt { order: 2; }
+  .sector-tag { display: inline-flex; font: italic 800 14px var(--cond); letter-spacing: .1em; }
+  .sector-tag b { background: #fff; color: #000; padding: 4px 10px; }
+  .sector-tag span { background: var(--s2); padding: 4px 12px; color: #d6dad6; }
+  .sector h3 { font: italic 800 2.4rem/1 var(--cond); text-transform: uppercase; margin: 18px 0 14px; }
+  .sector p { color: #b9beba; }
+  .ticks { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
+  .ticks li { padding-left: 30px; position: relative; color: #dfe3df; }
+  .ticks li::before { content: ""; position: absolute; left: 0; top: 7px; width: 16px; height: 9px; border-left: 3px solid var(--g); border-bottom: 3px solid var(--g); transform: rotate(-45deg); }
+  .frame { position: relative; border: 1px solid var(--line); background: var(--s1); border-radius: 6px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.5); }
+  .frame .bar { height: 30px; display: flex; align-items: center; gap: 7px; padding: 0 12px; border-bottom: 1px solid var(--line); }
+  .frame .bar i { width: 9px; height: 9px; border-radius: 50%; background: #2c3134; }
+  .visual { position: relative; }
+  .frame.shift { margin-left: 60px; }
 
-  .who { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .closing { text-align: center; }
-  .closing p { max-width: 600px; margin: 0 auto 24px; color: var(--soft); }
+  /* timing tower */
+  .tower { position: absolute; left: -34px; top: 40px; width: 210px; font: 700 15px var(--cond); box-shadow: 0 20px 50px rgba(0,0,0,.6); z-index: 2; }
+  .tower .hd { background: var(--g); color: #07130a; font-style: italic; font-weight: 800; letter-spacing: .1em; padding: 7px 12px; display: flex; justify-content: space-between; }
+  .tower .row { display: grid; grid-template-columns: 28px 52px 1fr; align-items: center; background: rgba(13,15,16,.95); border-top: 1px solid #1f2326; padding: 6px 12px 6px 0; }
+  .tower .row .p { text-align: center; color: var(--muted); }
+  .tower .row .n { background: #2a2f33; text-align: center; padding: 1px 0; border-radius: 2px; }
+  .tower .row .gap { text-align: right; color: #c9cdc9; font-variant-numeric: tabular-nums; }
+  .tower .row.me { background: rgba(94,187,71,.18); }
+  .tower .row.me .n { background: var(--g); color: #07130a; }
+  .tower .row.fight .gap { color: #ffb020; }
 
-  footer { border-top: 1px solid var(--border); padding: 32px 0 48px; color: var(--muted); font-size: 13px; }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; }
-  footer .links { display: flex; gap: 18px; margin-left: auto; }
+  /* more */
+  .more { background: var(--s1); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .grid6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 50px; }
+  .card { background: var(--bg); padding: 34px 30px; transition: background .2s; }
+  .card:hover { background: #101214; }
+  .card svg { width: 30px; height: 30px; stroke: var(--g); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .card h3 { font: italic 800 1.45rem/1.1 var(--cond); text-transform: uppercase; margin: 18px 0 10px; }
+  .card p { color: var(--muted); font-size: 15.5px; }
 
-  @media (max-width: 760px) {
-    .gallery, .who { grid-template-columns: 1fr; }
-    .hero { padding-top: 48px; }
-    section { padding: 52px 0; }
-    footer .links { margin-left: 0; }
+  /* cta */
+  .cta { position: relative; padding: 150px 0; text-align: center; background: linear-gradient(rgba(11,12,13,.78), rgba(11,12,13,.9)), url(site/band.jpg) center / cover; }
+  .cta h2 { font-size: clamp(2.8rem, 6vw, 5rem); }
+  .cta p { color: #c3c8c4; max-width: 560px; margin: 0 auto 32px; }
+
+  footer { border-top: 1px solid var(--line); padding: 40px 0 50px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+  footer ul { display: flex; flex-wrap: wrap; gap: 8px 22px; list-style: none; }
+  footer ul a:hover { color: #fff; }
+  footer .fine { flex-basis: 100%; font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    nav ul { display: none; }
+    .lower-third { display: none; }
+    .strip .wrap { grid-template-columns: 1fr 1fr; }
+    .stat { border-left: 0; padding-left: 0; }
+    .sector, .sector.flip { grid-template-columns: 1fr; gap: 36px; }
+    .sector.flip .txt { order: 0; }
+    .hero { background-position: 0 0, 62% center; }
+    .tower { position: static; width: auto; max-width: 260px; margin: 0 0 16px; font-size: 13px; }
+    .frame.shift { margin-left: 0; }
+    .stat b { font-size: 30px; }
+    .grid6 { grid-template-columns: 1fr; }
   }
+  @media (prefers-reduced-motion: reduce) { .wave i { animation: none; } html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
-<header>
+
+<nav>
   <div class="wrap">
-    <div class="brand"><img src="site/icon.svg" alt="">GRID CENTRAL</div>
-    <span class="soon">Coming soon</span>
+    <a class="logo" href="#"><svg viewBox="0 0 64 64" width="32" height="32" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#5ebb47"/><text x="32" y="42" text-anchor="middle" font-family="Space Grotesk, Arial" font-size="26" font-weight="700" fill="#07130a">GC</text></svg>GRID CENTRAL</a>
+    <ul><li><a href="#features">Features</a></li><li><a href="#overlays">Overlays</a></li><li><a href="#soon">Coming soon</a></li></ul>
+    <a class="btn btn-g" href="#soon">Get notified</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="live"><b>Coming soon</b><span>For iRacing on Windows</span></div>
+    <h1>Your race engineer, <em>in your ear.</em></h1>
+    <p>Grid Central calls the cars around you, coaches you corner by corner, works out your fuel and pit stops, and answers when you ask.</p>
+    <div class="ctas"><a class="btn btn-g" href="#soon">Get notified at launch →</a><a class="btn btn-o" href="#features">See what it does</a></div>
+  </div>
+  <div class="lower-third" aria-hidden="true">
+    <div class="who">ENGINEER</div>
+    <div class="say"><div class="wave"><i></i><i></i><i></i><i></i><i></i></div>Pit window's open. Box this lap.</div>
   </div>
 </header>
 
-<main>
-  <div class="hero wrap">
-    <div class="eyebrow">Coming soon · For iRacing on Windows</div>
-    <h1>Your race engineer,<br><span>in your ear.</span></h1>
-    <p class="lead">Grid Central calls the cars around you, coaches you corner by corner, works out your fuel and pit stops, and answers when you ask. It runs on your PC alongside iRacing.</p>
-    <p class="note">It's being finished with a small group of beta testers now, and opens to everyone soon.</p>
-    <img class="hero-shot" src="site/overview.png" alt="Grid Central's overview during a race at Road America: safety rating, iRating, best lap, track map and lap analysis" width="1416" height="774">
+<div class="strip">
+  <div class="wrap">
+    <div class="stat"><b>EN · ES · DE</b><span>App, voice and Talkback</span></div>
+    <div class="stat"><b>Offline</b><span>Voice commands, no cloud</span></div>
+    <div class="stat"><b>1 click</b><span>Overlay into OBS</span></div>
+    <div class="stat"><b>Your PC</b><span>Laps, setups and paints stay with you</span></div>
   </div>
+</div>
 
-  <section id="features">
-    <div class="wrap">
-      <div class="eyebrow">What it's for</div>
-      <h2>Everything a race engineer does, <span>on one screen.</span></h2>
-      <p class="section-lead">Live data comes straight from iRacing on your PC. Nothing about your driving leaves your computer unless you share it.</p>
-      <div class="features">
-        <div class="feature"><span class="tag">SPOTTER</span><h3>Voice spotter and engineer</h3><p>Car left, car right, clear. Flags, gaps, fuel, damage, weather and pit calls, read out in a natural voice and never talking over each other.</p></div>
-        <div class="feature"><span class="tag">TALKBACK</span><h3>Ask, and it answers</h3><p>Hold a wheel button and ask "how's the fuel?" or "gap behind?", or tell it "four new tyres, fill it up". Recognised offline, in English, Spanish or German.</p></div>
-        <div class="feature"><span class="tag">COACH</span><h3>Find your next tenth</h3><p>Every lap is compared with your best, corner by corner: braking, apex speed, exits. One focus corner at a time until it's fixed.</p></div>
-        <div class="feature"><span class="tag">STRATEGY</span><h3>Fuel to the finish</h3><p>Live fuel per lap, laps to go, the pit window and what to add. It can even set the fuel in iRacing's pit menu for you.</p></div>
-        <div class="feature"><span class="tag">SETUPS</span><h3>Setup help that makes sense</h3><p>Say "it's understeering" or "it bottoms out" and get the garage change to try. Compare setups by the laps you drove on them.</p></div>
-        <div class="feature"><span class="tag">OVERLAYS</span><h3>Overlays for stream and screen</h3><p>Design your own from widgets, or start from a template: standings, relative, fuel, tyres, flags, track map and more. Add it to OBS in one click, or show it over iRacing while you drive.</p></div>
-        <div class="feature"><span class="tag">BROADCAST</span><h3>Race commentary for your stream</h3><p>Two commentators call the race like TV: overtakes, battles, pit stops, flags and the finish. Your viewers hear them through OBS or any streaming app; you don't.</p></div>
-        <div class="feature"><span class="tag">PAINT SHOP</span><h3>Paint your car, helmet and suit</h3><p>Start from iRacing's template and patterns, recolour, add numbers and logos, choose a finish from matte to chrome, and watch it change on your car in iRacing as you paint.</p></div>
-        <div class="feature"><span class="tag">TEAM</span><h3>Phone pit wall and team hub</h3><p>Live timing and strategy on your phone, and a team page your crew can follow from anywhere. Driver swaps and team messages are read out to the driver.</p></div>
-        <div class="feature"><span class="tag">DISCORD</span><h3>Results in your league's Discord</h3><p>Race results and session summaries with fuel use and tyre wear, personal bests, "going live" posts with your stream links, and a league bot for schedules and sign-ups.</p></div>
+<section id="features">
+  <div class="wrap">
+    <div class="eyebrow">The full crew</div>
+    <h2>Everything a race engineer does.<br>On one screen.</h2>
+    <p class="lead">Live data comes straight from iRacing on your PC. Nothing about your driving leaves your computer unless you share it.</p>
+
+    <div class="sector">
+      <div class="txt">
+        <div class="sector-tag"><b>S1</b><span>VOICE</span></div>
+        <h3>Car left. Still there. Clear.</h3>
+        <p>Flags, gaps, fuel, damage, weather and pit calls, read out in a natural voice and never talking over each other.</p>
+        <ul class="ticks"><li>Hold a wheel button and ask: "how's the fuel?"</li><li>Turn any call type off</li><li>English, Spanish and German</li></ul>
+      </div>
+      <div class="visual"><div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="site/spotter.png" alt="Grid Central's AI spotter screen"></div></div>
+    </div>
+
+    <div class="sector flip">
+      <div class="txt">
+        <div class="sector-tag"><b>S2</b><span>STRATEGY</span></div>
+        <h3>Fuel to the finish.</h3>
+        <p>Live fuel per lap, laps to go, the pit window and what to add. It can even set the fuel in iRacing's pit menu for you.</p>
+        <ul class="ticks"><li>Pit window and fuel to add, live</li><li>Sets the pit menu only when you ask</li><li>Built for long races and team stints</li></ul>
+      </div>
+      <div class="visual"><div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="site/strategy.png" alt="Grid Central's race strategy screen"></div></div>
+    </div>
+
+    <div class="sector" id="overlays">
+      <div class="txt">
+        <div class="sector-tag"><b>S3</b><span>OVERLAYS</span></div>
+        <h3>Built like TV graphics.</h3>
+        <p>Design your own from widgets, or start from a template: standings, relative, fuel, tyres, flags, track map and more. Add it to OBS in one click, or show it over iRacing while you drive.</p>
+        <ul class="ticks"><li>Templates: TV graphics, Cockpit focus, Long race</li><li>Four themes, from Studio to Glass</li><li>Car numbers, gaps and battles at a glance</li></ul>
+      </div>
+      <div class="visual">
+        <div class="tower" aria-hidden="true">
+          <div class="hd"><span>LAP 14/30</span><span>●</span></div>
+          <div class="row"><span class="p">1</span><span class="n">7</span><span class="gap">Leader</span></div>
+          <div class="row"><span class="p">2</span><span class="n">22</span><span class="gap">+1.84</span></div>
+          <div class="row fight"><span class="p">3</span><span class="n">91</span><span class="gap">+4.10</span></div>
+          <div class="row me"><span class="p">4</span><span class="n">64</span><span class="gap">+4.36</span></div>
+          <div class="row"><span class="p">5</span><span class="n">3</span><span class="gap">+9.02</span></div>
+          <div class="row"><span class="p">6</span><span class="n">18</span><span class="gap">+11.7</span></div>
+        </div>
+        <div class="frame shift"><img src="site/overlay-themes.jpg" alt="Grid Central overlay themes"></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="who">
-    <div class="wrap">
-      <div class="eyebrow">Who it's for</div>
-      <h2>For drivers, streamers <span>and teams.</span></h2>
-      <p class="section-lead">Grid Central speaks English, Spanish and German.</p>
-      <div class="who">
-        <div class="card"><h3>Drivers</h3><p>From your first race to an endurance stint: a spotter that never misses a car, a coach that finds your next tenth, and strategy that gets you to the flag.</p></div>
-        <div class="card"><h3>Streamers</h3><p>Overlays you design yourself, two commentators your viewers hear and you don't, and OBS control from Grid Central or your phone.</p></div>
-        <div class="card"><h3>Teams and leagues</h3><p>A phone pit wall and a team page your crew can follow from anywhere, driver swaps read out in the car, and results posted to your league's Discord.</p></div>
-      </div>
+<section class="more">
+  <div class="wrap">
+    <div class="eyebrow">And the rest of the garage</div>
+    <h2>One app. Every job on race day.</h2>
+    <div class="grid6">
+      <div class="card"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><h3>Ask, and it answers</h3><p>"Gap behind?" or "four new tyres, fill it up". Recognised offline, in three languages.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 3 4-7 5 5"/><path d="M3 21h18"/></svg><h3>Find your next tenth</h3><p>Every lap compared with your best, corner by corner: braking, apex speed, exits.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg><h3>Setup help</h3><p>Say "it's understeering" and get the garage change to try. Compare setups by your laps.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 0 0 0 8M16 8a5.5 5.5 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></svg><h3>Race commentary</h3><p>Two commentators call your race like TV. Your viewers hear them; you don't.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24"><path d="M18 3l3 3-9 9-4 1 1-4z"/><path d="M8 17c-2 0-4 1-4 4h4a3 3 0 0 0 3-3"/></svg><h3>Paint shop</h3><p>Car, helmet and suit. Numbers, logos and finishes from matte to chrome.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><h3>Pit wall &amp; team hub</h3><p>Live timing on your phone, a hub for your crew, and results in your league's Discord.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="screens">
-    <div class="wrap">
-      <div class="eyebrow">Screens</div>
-      <h2>Built for <span>race day.</span></h2>
-      <p class="section-lead">Captured from a race in Grid Central's built-in demo.</p>
-      <div class="gallery">
-        <figure><img src="site/spotter.png" alt="AI spotter page with the live radar, call log and corner coaching" loading="lazy" width="1416" height="774"><figcaption>AI spotter: live radar, calls and corner-by-corner coaching.</figcaption></figure>
-        <figure><img src="site/strategy.png" alt="Race strategy page with fuel to the finish, stops needed and the pit window" loading="lazy" width="1416" height="774"><figcaption>Race strategy: fuel to the finish and the pit window, live.</figcaption></figure>
-        <figure><img src="site/overlay.png" alt="Overlay designer with a race overlay and the widget list" loading="lazy" width="1416" height="774"><figcaption>Overlay designer: for OBS, or on your screen in iRacing.</figcaption></figure>
-        <figure><img src="site/commentary.png" alt="Commentary settings on the Broadcast page: whose race to follow, the two voices and how much they talk" loading="lazy" width="1376" height="774"><figcaption>Broadcast commentary: two voices on your stream, not in your ears.</figcaption></figure>
-      </div>
-    </div>
-  </section>
-
-  <section class="closing">
-    <div class="wrap">
-      <div class="eyebrow">Coming soon</div>
-      <h2>Grid Central opens <span>to everyone soon.</span></h2>
-      <p>Questions, or want to hear when it opens? Email us at support@gridcentral.store.</p>
-      <a class="button" href="mailto:support@gridcentral.store?subject=Grid%20Central%3A%20help">Email us</a>
-    </div>
-  </section>
-</main>
+<section class="cta" id="soon">
+  <div class="wrap">
+    <div class="eyebrow">Coming soon</div>
+    <h2>Launching soon.</h2>
+    <p>Grid Central is coming soon. Email us and we'll tell you the moment it launches.</p>
+    <div class="ctas" style="justify-content:center;display:flex;gap:14px;flex-wrap:wrap"><a class="btn btn-g" href="mailto:support@gridcentral.store?subject=Tell%20me%20when%20Grid%20Central%20launches">Get notified →</a></div>
+  </div>
+</section>
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Grid Central</span>
-    <span>Grid Central is an independent app and is not affiliated with or endorsed by iRacing.com Motorsport Simulations.</span>
-    <nav class="links" aria-label="Legal">
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="refunds.html">Refunds</a>
-    </nav>
+    <a class="logo" href="#"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#5ebb47"/><text x="32" y="42" text-anchor="middle" font-family="Space Grotesk, Arial" font-size="26" font-weight="700" fill="#07130a">GC</text></svg>GRID CENTRAL</a>
+    <ul><li><a href="terms.html">Terms</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="mailto:support@gridcentral.store">support@gridcentral.store</a></li></ul>
+    <p class="fine">© 2026 Grid Central. Not affiliated with or endorsed by iRacing.com Motorsport Simulations.</p>
   </div>
 </footer>
+
 </body>
 </html>
