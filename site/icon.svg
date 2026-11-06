@@ -1,5 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#d2ff50"/>
-  <text x="31" y="42" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="-1" fill="#151810">GC</text>
-  <circle cx="53" cy="13" r="3" fill="#7da119"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<defs>
+<linearGradient id="c132dk" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="32"><stop offset="0" stop-color="#17191c"/><stop offset="1" stop-color="#0b0c0d"/></linearGradient>
+<linearGradient id="c132gf" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="32"><stop offset="0" stop-color="#f4f8fb"/><stop offset="0.5" stop-color="#f4f8fb"/><stop offset="0.5" stop-color="#a2b0be"/><stop offset="1" stop-color="#a2b0be"/></linearGradient>
+<linearGradient id="c132wf" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="32"><stop offset="0" stop-color="#b2bac2"/><stop offset="0.5" stop-color="#b2bac2"/><stop offset="0.5" stop-color="#707982"/><stop offset="1" stop-color="#707982"/></linearGradient>
+</defs>
+<circle cx="16" cy="16" r="16" fill="url(#c132dk)"/>
+<circle cx="16" cy="16" r="3" fill="url(#c132wf)"/>
+<path d="M16.177 17.237L22.187 23.248L23.248 22.187L17.237 16.177Z" fill="url(#c132wf)"/>
+<path d="M14.763 16.177L8.752 22.187L9.813 23.248L15.823 17.237Z" fill="url(#c132wf)"/>
+<path d="M15.823 14.763L9.813 8.752L8.752 9.813L14.763 15.823Z" fill="url(#c132wf)"/>
+<path d="M17.237 15.823L23.248 9.813L22.187 8.752L16.177 14.763Z" fill="url(#c132wf)"/>
+<path d="M15 15L15 7A1 1 0 0 0 17 7L17 15Z" fill="url(#c132wf)"/>
+<path d="M15 17L7 17A1 1 0 0 0 7 15L15 15Z" fill="url(#c132wf)"/>
+<path d="M17 17L17 25A1 1 0 0 0 15 25L15 17Z" fill="url(#c132wf)"/>
+<path d="M17 15L29.964 15A14 14 0 0 1 28.827 21.609A1.5 1.5 0 0 1 26.079 20.407A11 11 0 0 0 26.226 20.053A1.5 1.5 0 0 0 24.832 18L17 18Z" fill="url(#c132wf)"/>
+<path d="M29.675 13A14 14 0 0 0 19.333 2.403A3.5 3.5 0 0 0 15 5.802L15 7A1 1 0 0 0 17 7L17 6.835A1.5 1.5 0 0 1 18.895 5.388A11 11 0 0 1 26.583 13Z" fill="url(#c132gf)"/>
+<path d="M16.092 2A14 14 0 0 0 2.403 12.667A3.5 3.5 0 0 0 5.802 17L7 17A1 1 0 0 0 7 15L6.835 15A1.5 1.5 0 0 1 5.388 13.105A11 11 0 0 1 14.044 5.175A4.5 4.5 0 0 1 16.092 2Z" fill="url(#c132gf)"/>
+<path d="M2 15.908A14 14 0 0 0 12.667 29.597A3.5 3.5 0 0 0 17 26.198L17 25A1 1 0 0 0 15 25L15 25.165A1.5 1.5 0 0 1 13.105 26.612A11 11 0 0 1 5.175 17.956A4.5 4.5 0 0 1 2 15.908Z" fill="url(#c132gf)"/>
+<path d="M15.908 30A14 14 0 0 0 28.827 21.609A1.5 1.5 0 0 1 26.079 20.407A11 11 0 0 1 17.956 26.825A4.5 4.5 0 0 1 15.908 30Z" fill="url(#c132gf)"/>
 </svg>
