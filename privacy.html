@@ -23,7 +23,7 @@
 
 <main>
   <h1>Privacy policy</h1>
-  <p class="updated">Last updated 9 November 2026</p>
+  <p class="updated">Last updated 12 November 2026</p>
 
   <section class="short" aria-labelledby="short-h">
     <h2 id="short-h">The short version</h2>
@@ -41,7 +41,7 @@
 
   <h2 id="on-your-pc">2. What stays on your PC</h2>
   <ul>
-    <li>Laps, telemetry, setups, paints, overlays, debriefs, settings and the phrases you teach Talkback are kept on your PC, along with Grid Central's log file (companion.log).</li>
+    <li>Laps, telemetry, setups, paints, overlays, debriefs, settings and the phrases you teach Talkback are kept on your PC, along with Grid Central's log file (companion.log). An overlay leaves your PC only if you share it with your team or publish it to the community library (below).</li>
     <li>The phone pit wall connects your phone to your PC over your own network, not through our servers.</li>
     <li>Talkback listens only while you hold your talk button, and turns your speech into text on your PC. No audio is saved or sent.</li>
     <li>The stream commentary's natural voices are made on your PC.</li>
@@ -53,9 +53,9 @@
       <thead><tr><th scope="col">What</th><th scope="col">Why</th><th scope="col">Where it's kept</th></tr></thead>
       <tbody>
         <tr>
-          <th scope="row">Account: your email, password, account ID and the date you signed up</th>
+          <th scope="row">Account: your email, account ID and the date you signed up</th>
           <td data-label="Why">To sign you in and keep your plan</td>
-          <td data-label="Where">The sign-in is with Google Firebase, which stores your password scrambled (hashed), so we can't see it. Your account record is on our server at Cloudflare.</td>
+          <td data-label="Where">You sign in with a 6-digit code we email you; there's no password. The code is sent through Resend and checked by our server at Cloudflare, where your account record is kept. If you update from version 0.5.9.4 or earlier, Google Firebase (which handled sign-in until then) is used once to move your sign-in to the new kind.</td>
         </tr>
         <tr>
           <th scope="row">Your PCs: a random ID for each PC, the PC's name as Windows reports it (for example "RACING-PC"), and fingerprints of its hardware, made from its motherboard's and system disk's IDs in a way that can't be turned back into them</th>
@@ -96,6 +96,11 @@
           <th scope="row">Lap library, only for laps you share: the lap (its speed, inputs and line), its car, track, time and date; your iRacing name, which other Grid Central drivers see with it; and your iRacing customer ID, which only we see (so only laps you drove yourself go in)</th>
           <td data-label="Why">To share fast laps between Grid Central's drivers. Your name shows only after you say yes the first time you share</td>
           <td data-label="Where">Our server at Cloudflare. Remove a lap, or delete your account, and it's gone</td>
+        </tr>
+        <tr>
+          <th scope="row">Overlays, only ones you share with your team or publish to the community library: the overlay's design (its widgets, their settings and its pictures), its name and description, and the name you choose to show with it; for the community library, whether we listed it (and why not), and the reports you make about other drivers' overlays</th>
+          <td data-label="Why">So your team-mates, or every Grid Central driver once we've checked it, can install a copy</td>
+          <td data-label="Where">Our server at Cloudflare. Take it back, or delete your account, and it's gone (copies other drivers installed stay on their PCs)</td>
         </tr>
         <tr>
           <th scope="row">Help desk and support: what you send through Grid Central Pitlane, our help desk at help.gridcentral.store (your answers, your email address and any files you attach, such as companion.log, screenshots or a short video; a companion.log can show your Windows user name and other drivers' names), the ticket's history (our replies, notes and status), emails you send us, and, if you rate our help after a ticket is closed, your rating and any comment</th>
@@ -164,9 +169,9 @@
     <table>
       <thead><tr><th scope="col">Provider</th><th scope="col">What for</th></tr></thead>
       <tbody>
-        <tr><th scope="row"><a href="https://firebase.google.com/support/privacy">Google Firebase</a></th><td data-label="What for">Sign-in and the team hub</td></tr>
+        <tr><th scope="row"><a href="https://firebase.google.com/support/privacy">Google Firebase</a></th><td data-label="What for">Moving a sign-in from version 0.5.9.4 or earlier to the new kind, once</td></tr>
         <tr><th scope="row"><a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a></th><td data-label="What for">This website, our server (accounts, plans, teams and purchases), the help desk's tickets, files and spam check, translating support messages between English, Spanish and German (Cloudflare's own AI, run on its servers), and forwarding email sent to support@gridcentral.store</td></tr>
-        <tr><th scope="row"><a href="https://resend.com/legal/privacy-policy">Resend</a></th><td data-label="What for">Sending our emails: when your subscription moves to another PC, when a second subscription is cancelled and refunded, the help desk's (your ticket number and our replies), and the launch list's</td></tr>
+        <tr><th scope="row"><a href="https://resend.com/legal/privacy-policy">Resend</a></th><td data-label="What for">Sending our emails: your sign-in codes, when your subscription moves to another PC, when a second subscription is cancelled and refunded, the help desk's (your ticket number and our replies), and the launch list's</td></tr>
         <tr><th scope="row"><a href="https://www.lemonsqueezy.com/privacy">Lemon Squeezy</a></th><td data-label="What for">Selling subscriptions, as merchant of record. Lemon Squeezy is responsible for the payment details it collects.</td></tr>
         <tr><th scope="row"><a href="https://policies.google.com/privacy">Google</a></th><td data-label="What for">Support email (Gmail)</td></tr>
         <tr><th scope="row"><a href="https://www.anthropic.com/legal/privacy">Anthropic (Claude)</a></th><td data-label="What for">Helping our help desk read tickets and support emails and draft replies. A person checks every reply before it's sent. We've switched off Anthropic's use of our conversations to train its models.</td></tr>
@@ -184,6 +189,7 @@
     <li><strong>Account, plan and team data:</strong> while you have an account. <strong>Delete my account</strong> in Grid Central (Settings → Account) deletes it straight away, with a team you own; if you ask us instead, we delete it within 30 days.</li>
     <li><strong>The free trial record and beta codes:</strong> after an account is deleted, we keep the PC's random ID, its hardware fingerprints, the internet address fingerprint, the email address fingerprint and the fingerprint of a beta code it used (without your account or email), so the free trial stays once per PC and once per email address, and each beta code is used once. <strong>Download my data</strong> includes these fingerprints while you have an account.</li>
     <li><strong>Moves to another PC:</strong> while you have an account; deleting your account deletes them.</li>
+    <li><strong>Sign-ins from before version 0.5.9.6:</strong> Google Firebase still holds the email and scrambled password of accounts made with version 0.5.9.4 or earlier. Once every tester has updated, we delete them there.</li>
     <li><strong>Counts of requests:</strong> 2 days.</li>
     <li><strong>Purchase records</strong>, Lemon Squeezy's messages about them included: as long as tax and accounting law requires (in Australia, generally 5 years).</li>
     <li><strong>Team hub:</strong> your car's data is replaced every 2 seconds while you drive. Team chat stays in the team's room until you ask us to delete it. Deleting your account removes your car from your team's room, and the room itself if the team is yours.</li>
